@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guia de Uso Responsável da Tecnologia</title>
+    <style>
+      :root {
+        --primary-blue: #1e3a8a;
+        --secondary-blue: #3b82f6;
+        --light-blue: #dbeafe;
+        --dark-gray: #4b5563;
+        --medium-gray: #9ca3af;
+        --light-gray: #f3f4f6;
+        --white: #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--light-gray);
+        color: var(--dark-gray);
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-blue),
+          var(--secondary-blue)
+        );
+        color: var(--white);
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .tab-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .tab-button {
+        background-color: var(--white);
+        border: none;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--dark-gray);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .tab-button:hover {
+        background-color: var(--light-blue);
+        transform: translateY(-2px);
+      }
+
+      .tab-button.active {
+        background-color: var(--secondary-blue);
+        color: var(--white);
+      }
+
+      .content-section {
+        background-color: var(--white);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: var(--primary-blue);
+        margin-bottom: 1rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        border-bottom: 2px solid var(--light-blue);
+        padding-bottom: 0.5rem;
+      }
+
+      h3 {
+        font-size: 1.4rem;
+        margin-top: 1.5rem;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+
+      ul,
+      ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      .highlight-box {
+        background-color: var(--light-blue);
+        border-left: 4px solid var(--secondary-blue);
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .quiz-container {
+        background-color: var(--light-blue);
+        border-radius: 12px;
+        padding: 2rem;
+        margin: 2rem 0;
+      }
+
+      .quiz-question {
+        margin-bottom: 1.5rem;
+      }
+
+      .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .quiz-option {
+        background-color: var(--white);
+        padding: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+      }
+
+      .quiz-option:hover {
+        background-color: var(--light-gray);
+        border-color: var(--medium-gray);
+      }
+
+      .quiz-option.selected {
+        background-color: var(--secondary-blue);
+        color: var(--white);
+        border-color: var(--primary-blue);
+      }
+
+      .quiz-result {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--white);
+        border-radius: 12px;
+        margin-top: 1.5rem;
+      }
+
+      .btn {
+        background-color: var(--secondary-blue);
+        color: var(--white);
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn:hover {
+        background-color: var(--primary-blue);
+        transform: translateY(-2px);
+      }
+
+      .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+      }
+
+      .back-to-top {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: var(--primary-blue);
+        color: var(--white);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .back-to-top.visible {
+        opacity: 1;
+      }
+
+      .icon {
+        font-size: 1.2rem;
+      }
+
+      .manual-link {
+        display: inline-block;
+        margin-top: 1rem;
+        text-decoration: none;
+      }
+
+      .manual-link:hover {
+        text-decoration: underline;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .tab-button {
+          flex: 1 1 calc(50% - 0.5rem);
+          justify-content: center;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Guia de Uso Responsável da Tecnologia</h1>
+      <p>
+        Orientações para o uso adequado de equipamentos e softwares corporativos
+      </p>
+    </header>
+
+    <div class="container">
+      <div class="tab-container">
+        <button class="tab-button active" data-tab="quiz">
+          <span class="icon">❓</span> Quiz Interativo
+        </button>
+        <button class="tab-button" data-tab="equipamentos">
+          <span class="icon">💻</span> Uso de Equipamentos
+        </button>
+        <button class="tab-button" data-tab="emprestimo">
+          <span class="icon">🔄</span> Equipamentos sob Empréstimo
+        </button>
+        <button class="tab-button" data-tab="acesso-remoto">
+          <span class="icon">🔒</span> Acesso Remoto
+        </button>
+        <button class="tab-button" data-tab="spark">
+          <span class="icon">💬</span> Uso do SPARK
+        </button>
+        <button class="tab-button" data-tab="seguranca">
+          <span class="icon">🛡️</span> Segurança Digital
+        </button>
+        <button class="tab-button" data-tab="politicas">
+          <span class="icon">📋</span> Políticas do Usuário
+        </button>
+      </div>
+
+      <!-- Seção do Quiz -->
+      <section id="quiz" class="content-section active">
+        <h2>Quiz: O que você faria se...</h2>
+        <p>
+          Teste seus conhecimentos sobre o uso responsável da tecnologia com
+          este quiz interativo.
+        </p>
+
+        <div class="quiz-container">
+          <div class="quiz-question">
+            <h3>
+              1. Você recebe um e-mail suspeito solicitando suas credenciais de
+              acesso. O que faz?
+            </h3>
+            <div class="quiz-options">
+              <div class="quiz-option" data-correct="false">
+                Respondo fornecendo minhas credenciais para não causar problemas
+              </div>
+              <div class="quiz-option" data-correct="true">
+                Ignoro o e-mail e reporto ao departamento de TI
+              </div>
+              <div class="quiz-option" data-correct="false">
+                Verifico o remetente e, se parecer legítimo, forneço as
+                informações
+              </div>
+            </div>
+          </div>
+
+          <div class="quiz-question">
+            <h3>
+              2. Você precisa transportar um notebook corporativo para uma
+              reunião externa. Como procede?
+            </h3>
+            <div class="quiz-options">
+              <div class="quiz-option" data-correct="false">
+                Coloco na mochila comum com meus pertences pessoais
+              </div>
+              <div class="quiz-option" data-correct="true">
+                Uso a maleta específica fornecida pela empresa
+              </div>
+              <div class="quiz-option" data-correct="false">
+                Deixo no carro durante a reunião para não carregar peso
+              </div>
+            </div>
+          </div>
+
+          <div class="quiz-question">
+            <h3>
+              3. Você percebe que seu computador está lento e com notificações
+              de atualização pendente. O que faz?
+            </h3>
+            <div class="quiz-options">
+              <div class="quiz-option" data-correct="false">
+                Ignoro as notificações para não interromper meu trabalho
+              </div>
+              <div class="quiz-option" data-correct="false">
+                Desligo as notificações para não me incomodar
+              </div>
+              <div class="quiz-option" data-correct="true">
+                Realizo as atualizações conforme orientado pelo departamento de
+                TI
+              </div>
+            </div>
+          </div>
+
+          <button id="check-answers" class="btn btn-large">
+            Verificar Respostas
+          </button>
+
+          <div id="quiz-result" class="quiz-result">
+            <h3>Resultado do Quiz</h3>
+            <p id="result-text"></p>
+            <button id="restart-quiz" class="btn">Refazer Quiz</button>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <h3>📘 Manual Completo em PDF</h3>
+          <p>
+            Para acessar o guia completo em formato PDF interativo, clique no
+            botão abaixo:
+          </p>
+          <a href="#" class="btn manual-link">
+            <span class="icon">📥</span> Baixar Manual em PDF
+          </a>
+          <p>
+            <small
+              >O PDF inclui botões clicáveis, links internos, ícones e recursos
+              avançados de navegação.</small
+            >
+          </p>
+        </div>
+      </section>
+
+      <!-- Seção de Uso de Equipamentos -->
+      <section id="equipamentos" class="content-section">
+        <h2>Uso de Equipamentos</h2>
+
+        <h3>Cuidados gerais e preservação dos equipamentos</h3>
+        <p>
+          Manter sempre os microcomputadores e notebooks atualizados para evitar
+          lentidão e problemas de drivers de software.
+        </p>
+
+        <div class="highlight-box">
+          <p>
+            <strong>OBSERVAÇÃO IMPORTANTE:</strong> Fique atento às notificações
+            localizadas no canto inferior direito, que sinalizam quando há uma
+            atualização necessária para ser feita.
+          </p>
+        </div>
+
+        <h3>Uso correto e seguro</h3>
+        <ul>
+          <li>Procedimento para ligar e desligar adequadamente</li>
+          <li>
+            Manuseio de softwares essenciais (e-mail, pastas, configurações do
+            sistema, navegador, etc.)
+          </li>
+          <li>Armazenamento e organização de arquivos</li>
+        </ul>
+      </section>
+
+      <!-- Seção de Equipamentos sob Empréstimo -->
+      <section id="emprestimo" class="content-section">
+        <h2>Equipamentos sob Empréstimo</h2>
+
+        <h3>Regras e políticas de empréstimo</h3>
+        <p>
+          Ao receber o equipamento, o colaborador assina o
+          <strong>Termo de Posse</strong>, documento que formaliza a entrega e
+          reconhece a responsabilidade sobre o uso e a guarda do bem.
+        </p>
+
+        <p>
+          Quando o equipamento é devolvido, o colaborador assina o
+          <strong>Termo de Devolução</strong>, que confirma o retorno do item em
+          boas condições de funcionamento.
+        </p>
+
+        <h3>Manuseio adequado dos equipamentos</h3>
+        <ul>
+          <li>Segurar o dispositivo com ambas as mãos</li>
+          <li>Não pressionar telas ou teclados com força excessiva</li>
+          <li>Conectar e desconectar cabos periféricos com cuidado</li>
+          <li>Evitar comer ou beber próximo aos equipamentos</li>
+        </ul>
+
+        <h3>Cuidados ao transportar</h3>
+        <ul>
+          <li>Sempre utilizar as maletas e cases específicos fornecidos</li>
+          <li>
+            Manter os equipamentos longe de extremos de temperatura e umidade
+          </li>
+          <li>Evitar movimentos bruscos durante o deslocamento</li>
+          <li>Proteger contra chuva e impactos</li>
+        </ul>
+      </section>
+
+      <!-- Seção de Acesso Remoto -->
+      <section id="acesso-remoto" class="content-section">
+        <h2>Softwares de Acesso Remoto</h2>
+
+        <h3>Funcionalidades principais</h3>
+        <p>
+          Os softwares de acesso remoto permitem conectar-se a outros
+          computadores à distância, facilitando o suporte técnico e o trabalho
+          remoto.
+        </p>
+
+        <h3>Procedimentos para iniciar e finalizar conexões</h3>
+        <ol>
+          <li>
+            Verificar se o software está devidamente instalado e atualizado
+          </li>
+          <li>Utilizar credenciais autorizadas para estabelecer a conexão</li>
+          <li>Seguir os protocolos de segurança durante a sessão remota</li>
+          <li>Encerrar corretamente a conexão ao finalizar o trabalho</li>
+        </ol>
+
+        <h3>Boas práticas de uso</h3>
+        <ul>
+          <li>Manter sigilo das senhas e credenciais de acesso</li>
+          <li>Evitar acesso indevido a sistemas não autorizados</li>
+          <li>Registrar todas as sessões de acesso remoto</li>
+        </ul>
+      </section>
+
+      <!-- Seção do SPARK -->
+      <section id="spark" class="content-section">
+        <h2>Uso do SPARK</h2>
+
+        <h3>O que é o SPARK?</h3>
+        <p>
+          O SPARK é uma ferramenta de comunicação corporativa desenvolvida para
+          facilitar a troca de informações entre colaboradores, promover o
+          trabalho em equipe e garantir uma comunicação rápida e eficiente
+          dentro da empresa.
+        </p>
+
+        <h3>Uso adequado no ambiente corporativo</h3>
+        <p>
+          O SPARK deve ser utilizado exclusivamente para assuntos relacionados
+          ao ambiente de trabalho. Por ser um canal oficial da empresa, todas as
+          conversas devem manter um tom profissional, respeitoso e alinhado às
+          políticas internas de conduta.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Abertura do SPARK ao Iniciar o Expediente</h3>
+          <p>
+            É fundamental que o colaborador abra o SPARK assim que iniciar sua
+            jornada de trabalho. Isso garante que ele esteja disponível para
+            receber comunicados, solicitações e instruções da equipe ou da
+            liderança.
+          </p>
+        </div>
+      </section>
+
+      <!-- Seção de Segurança Digital -->
+      <section id="seguranca" class="content-section">
+        <h2>Segurança Digital</h2>
+
+        <h3>Uso de senhas fortes</h3>
+        <ul>
+          <li>
+            Utilizar combinações de letras maiúsculas e minúsculas, números e
+            símbolos
+          </li>
+          <li>Evitar informações pessoais óbvias em senhas</li>
+          <li>Não reutilizar senhas entre diferentes sistemas</li>
+          <li>Alterar senhas periodicamente</li>
+        </ul>
+
+        <h3>Autenticação em dois fatores</h3>
+        <p>
+          Sempre que disponível, ative a autenticação em dois fatores para
+          adicionar uma camada extra de segurança às suas contas.
+        </p>
+
+        <h3>Antivírus</h3>
+        <p>
+          Mantenha o software antivírus sempre atualizado e execute verificações
+          regulares em seu equipamento.
+        </p>
+
+        <h3>Conscientização sobre ameaças</h3>
+        <ul>
+          <li>
+            Phishing: Desconfie de e-mails suspeitos solicitando informações
+            pessoais
+          </li>
+          <li>
+            Malware: Evite clicar em links ou baixar arquivos de fontes não
+            confiáveis
+          </li>
+          <li>
+            Engenharia social: Esteja atento a tentativas de manipulação para
+            obter informações confidenciais
+          </li>
+        </ul>
+
+        <h3>Backup de dados importantes</h3>
+        <p>
+          Realize backups regulares de arquivos importantes em locais seguros e
+          autorizados pela empresa.
+        </p>
+      </section>
+
+      <!-- Seção de Políticas do Usuário -->
+      <section id="politicas" class="content-section">
+        <h2>Políticas do Usuário</h2>
+
+        <h3>Responsabilidade sobre os dados</h3>
+        <p>
+          Cada profissional é responsável pelos dados que acessa, utiliza ou
+          compartilha. É essencial agir com cuidado, evitando o repasse de
+          informações sem autorização e assegurando que os dados sejam usados
+          apenas para fins legítimos e dentro das políticas da empresa.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Principais Responsabilidades</h3>
+          <ul>
+            <li>
+              Zelar pela integridade e confidencialidade das informações
+              corporativas
+            </li>
+            <li>
+              Reportar imediatamente qualquer suspeita de violação de dados
+            </li>
+            <li>
+              Utilizar os recursos tecnológicos apenas para fins profissionais
+              autorizados
+            </li>
+            <li>
+              Cumprir todas as políticas de segurança da informação
+              estabelecidas pela empresa
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="back-to-top" id="backToTop">
+      <span class="icon">↑</span>
+    </div>
+
+    <script>
+      // Navegação por abas
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          // Remove a classe active de todos os botões e seções
+          document.querySelectorAll(".tab-button").forEach((btn) => {
+            btn.classList.remove("active");
+          });
+          document.querySelectorAll(".content-section").forEach((section) => {
+            section.classList.remove("active");
+          });
+
+          // Adiciona a classe active ao botão clicado
+          button.classList.add("active");
+
+          // Mostra a seção correspondente
+          const tabId = button.getAttribute("data-tab");
+          document.getElementById(tabId).classList.add("active");
+        });
+      });
+
+      // Botão Voltar ao Topo
+      const backToTopButton = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.classList.add("visible");
+        } else {
+          backToTopButton.classList.remove("visible");
+        }
+      });
+
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+      // Quiz Interativo
+      document.querySelectorAll(".quiz-option").forEach((option) => {
+        option.addEventListener("click", () => {
+          // Remove a seleção de outras opções na mesma pergunta
+          const parentQuestion = option.parentElement;
+          parentQuestion.querySelectorAll(".quiz-option").forEach((opt) => {
+            opt.classList.remove("selected");
+          });
+
+          // Seleciona a opção clicada
+          option.classList.add("selected");
+        });
+      });
+
+      document.getElementById("check-answers").addEventListener("click", () => {
+        let score = 0;
+        let totalQuestions = document.querySelectorAll(".quiz-question").length;
+
+        document.querySelectorAll(".quiz-question").forEach((question) => {
+          const selectedOption = question.querySelector(
+            ".quiz-option.selected"
+          );
+          if (
+            selectedOption &&
+            selectedOption.getAttribute("data-correct") === "true"
+          ) {
+            score++;
+          }
+        });
+
+        const resultText = document.getElementById("result-text");
+        const quizResult = document.getElementById("quiz-result");
+
+        if (score === totalQuestions) {
+          resultText.textContent = `Parabéns! Você acertou todas as ${totalQuestions} perguntas! Você demonstra excelente conhecimento sobre o uso responsável da tecnologia.`;
+        } else if (score >= totalQuestions / 2) {
+          resultText.textContent = `Você acertou ${score} de ${totalQuestions} perguntas. Seu conhecimento é bom, mas há espaço para melhorias. Revise o manual para aprimorar suas práticas.`;
+        } else {
+          resultText.textContent = `Você acertou ${score} de ${totalQuestions} perguntas. Recomendamos que você revise cuidadosamente o manual de uso responsável da tecnologia.`;
+        }
+
+        quizResult.style.display = "block";
+        quizResult.scrollIntoView({ behavior: "smooth" });
+      });
+
+      document.getElementById("restart-quiz").addEventListener("click", () => {
+        // Remove seleções
+        document.querySelectorAll(".quiz-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // Esconde resultado
+        document.getElementById("quiz-result").style.display = "none";
+
+        // Rola para o topo do quiz
+        document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
+      });
+    </script>
+  </body>
+</html>
