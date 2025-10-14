@@ -178,7 +178,13 @@ li {
   margin-top: 1.5rem;
 }
 
+.quiz-btn {
+  display: flex;
+  justify-content: end;
+}
+
 .btn {
+  display: flex;
   background-color: #3b82f6;
   color: white;
   border: none;
@@ -188,12 +194,13 @@ li {
   font-weight: 600;
   transition: all 0.3s ease;
   display: inline-flex;
-  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
 .btn:hover {
   transform: translateY(-2px);
+  background-color: #1e3a8a;
 }
 
 .btn-large {
@@ -205,6 +212,7 @@ li {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
+  background-color: #3b82f6;
   color: white;
   width: 50px;
   height: 50px;
@@ -212,19 +220,31 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transition: all 0.3s ease;
   z-index: 1000;
 }
 
+.back-to-top:hover {
+  background-color: #1e3a8a;
+  transform: translateY(-2px);
+}
+
 .back-to-top.visible {
   opacity: 1;
+  cursor: pointer;
 }
 
 .icon {
+  display: none;
+  align-items: center;
+  justify-content: center;
   font-size: 1.2rem;
+}
+
+.icon.visible {
+  display: flex;
 }
 
 .manual-link {

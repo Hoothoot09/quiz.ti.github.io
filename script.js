@@ -19,13 +19,15 @@ document.querySelectorAll(".tab-button").forEach((button) => {
 });
 
 // Botão Voltar ao Topo
-const backToTopButton = document.getElementById("backToTop");
+const backToTopButton = document.getElementById("backToTop", "icon");
 
 window.addEventListener("scroll", () => {
   if (window.pageYOffset > 300) {
     backToTopButton.classList.add("visible");
+    icon.classList.add("visible");
   } else {
     backToTopButton.classList.remove("visible");
+    icon.classList.remove("visible");
   }
 });
 
