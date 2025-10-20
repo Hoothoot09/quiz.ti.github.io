@@ -19,17 +19,33 @@ body {
 }
 
 header {
-  /* background: linear-gradient(135deg, #1e3a8a, #3b82f6); */
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  width: 1136px;
+  background: linear-gradient(180deg, white 50%, #3b82f680);
   background-color: white;
   color: white;
-  padding: 1.5rem;
+  padding: 1rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 12px 12px;
 }
 
 .logo {
   margin: 0 auto;
-  width: 400px;
+  width: 600px;
+}
+
+.titulo {
+  color: #3e4c4d;
+  margin-top: 2rem;
+  font-size: 24px;
+}
+
+.subtitulo {
+  color: #3e4c4d;
+  margin-bottom: 0;
 }
 
 .container {
@@ -84,11 +100,6 @@ header {
   display: block;
 }
 
-h1 {
-  /* color: white; */
-  color: blue;
-  margin-bottom: 1rem;
-}
 h2,
 h3 {
   color: #1e3a8a;
