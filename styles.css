@@ -34,12 +34,12 @@ header {
 
 .logo {
   margin: 0 auto;
-  width: 600px;
+  width: 400px;
 }
 
 .titulo {
   color: #3e4c4d;
-  margin-top: 2rem;
+  margin-top: 1rem;
   font-size: 24px;
 }
 
