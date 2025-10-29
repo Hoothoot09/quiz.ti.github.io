@@ -1,27 +1,21 @@
-// Navegação por abas
+// Navegação por abas (se existir)
 document.querySelectorAll(".tab-button").forEach((button) => {
   button.addEventListener("click", () => {
-    // Remove a classe active de todos os botões e seções
-    document.querySelectorAll(".tab-button").forEach((btn) => {
-      btn.classList.remove("active");
-    });
-    document.querySelectorAll(".content-section").forEach((section) => {
-      section.classList.remove("active");
-    });
-
-    // Adiciona a classe active ao botão clicado
+    document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
+    document.querySelectorAll(".content-section").forEach((section) => section.classList.remove("active"));
     button.classList.add("active");
-
-    // Mostra a seção correspondente
     const tabId = button.getAttribute("data-tab");
-    document.getElementById(tabId).classList.add("active");
+    const target = document.getElementById(tabId);
+    if (target) target.classList.add("active");
   });
 });
 
 // Botão Voltar ao Topo
-const backToTopButton = document.getElementById("backToTop", "icon");
+const backToTopButton = document.getElementById("backToTop");
+const icon = document.getElementById("icon");
 
 window.addEventListener("scroll", () => {
+  if (!backToTopButton || !icon) return;
   if (window.pageYOffset > 300) {
     backToTopButton.classList.add("visible");
     icon.classList.add("visible");
@@ -31,65 +25,151 @@ window.addEventListener("scroll", () => {
   }
 });
 
-backToTopButton.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
+if (backToTopButton) {
+  backToTopButton.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
-});
+}
 
-// Quiz Interativo
+// --- Quiz: uma questão por vez ---
+const questions = Array.from(document.querySelectorAll(".quiz-question"));
+const prevBtn = document.getElementById("prev-question");
+const nextBtn = document.getElementById("next-question");
+const checkBtn = document.getElementById("check-answers");
+const quizResult = document.getElementById("quiz-result");
+const quizControls = document.getElementById("quiz-controls");
+let currentIndex = 0;
+
+function showQuestion(index) {
+  if (questions.length === 0) return;
+  currentIndex = Math.max(0, Math.min(index, questions.length - 1));
+  questions.forEach((q, i) => {
+    q.style.display = i === currentIndex ? "block" : "none";
+  });
+  // Atualiza estado dos botões
+  if (prevBtn) prevBtn.disabled = currentIndex === 0;
+  if (nextBtn) nextBtn.disabled = currentIndex === questions.length - 1;
+}
+
+// Inicializa exibição
+showQuestion(0);
+
+// Seleção de opção (escopo por pergunta)
 document.querySelectorAll(".quiz-option").forEach((option) => {
   option.addEventListener("click", () => {
-    // Remove a seleção de outras opções na mesma pergunta
-    const parentQuestion = option.parentElement;
-    parentQuestion.querySelectorAll(".quiz-option").forEach((opt) => {
-      opt.classList.remove("selected");
-    });
-
-    // Seleciona a opção clicada
+    const parentQuestion = option.closest(".quiz-question");
+    if (!parentQuestion) return;
+    parentQuestion.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected"));
     option.classList.add("selected");
   });
 });
 
-document.getElementById("check-answers").addEventListener("click", () => {
-  let score = 0;
-  let totalQuestions = document.querySelectorAll(".quiz-question").length;
+if (prevBtn) {
+  prevBtn.addEventListener("click", () => {
+    showQuestion(currentIndex - 1);
+  });
+}
 
-  document.querySelectorAll(".quiz-question").forEach((question) => {
-    const selectedOption = question.querySelector(".quiz-option.selected");
-    if (
-      selectedOption &&
-      selectedOption.getAttribute("data-correct") === "true"
-    ) {
-      score++;
+if (nextBtn) {
+  nextBtn.addEventListener("click", () => {
+    showQuestion(currentIndex + 1);
+  });
+}
+
+// Pontuação e verificação por pergunta
+let totalScore = 0;
+let answeredCount = 0;
+
+if (checkBtn) {
+  checkBtn.addEventListener("click", () => {
+    const question = questions[currentIndex];
+    if (!question) return;
+
+    // se já verificada, apenas rola para o feedback
+    if (question.dataset.answered === "true") {
+      const fb = question.querySelector(".feedback");
+      if (fb) fb.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    const selected = question.querySelector(".quiz-option.selected");
+    let feedback = question.querySelector(".feedback");
+    if (!feedback) {
+      feedback = document.createElement("div");
+      feedback.className = "feedback";
+      question.appendChild(feedback);
+    }
+
+    if (!selected) {
+      feedback.innerHTML = '<p class="warning">Por favor, selecione uma opção antes de verificar.</p>';
+      feedback.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    const isCorrect = selected.getAttribute("data-correct") === "true";
+
+    if (isCorrect) {
+      totalScore++;
+      selected.classList.add("correct");
+      feedback.innerHTML = '<p class="correct-msg">Correto! Você ganhou 1 ponto.</p>';
+    } else {
+      selected.classList.add("incorrect");
+      const correctOpt = question.querySelector('.quiz-option[data-correct="true"]');
+      if (correctOpt) {
+        correctOpt.classList.add("correct");
+        // extrai letra e texto da opção correta
+        const strong = correctOpt.querySelector("strong");
+        const letter = strong ? strong.textContent.trim() : ""
+        const text = correctOpt.textContent.replace(letter, "").trim();
+        feedback.innerHTML = `<p class="incorrect-msg">Errado. A resposta correta é <strong>${letter}</strong> ${text}.</p>`;
+      } else {
+        feedback.innerHTML = '<p class="incorrect-msg">Errado.</p>';
+      }
+    }
+
+    // explicação (se existir data-explanation na pergunta)
+    const explanation = question.dataset.explanation;
+    if (explanation) {
+      feedback.innerHTML += `<div class="explanation">${explanation}</div>`;
+    } else {
+      feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
+    }
+
+    // marca como respondida e evita re-pontuar
+    question.dataset.answered = "true";
+    answeredCount++;
+
+    // trava opções desta pergunta
+    question.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.add("locked"));
+
+    // se todas respondidas, mostra resultado final
+    if (answeredCount === questions.length) {
+      const resultText = document.getElementById("result-text");
+      if (resultText && quizResult) {
+        resultText.textContent = `Você acertou ${totalScore} de ${questions.length} perguntas.`;
+        quizResult.style.display = "block";
+        quizResult.scrollIntoView({ behavior: "smooth" });
+      }
     }
   });
+}
 
-  const resultText = document.getElementById("result-text");
-  const quizResult = document.getElementById("quiz-result");
-
-  if (score === totalQuestions) {
-    resultText.textContent = `Parabéns! Você acertou todas as ${totalQuestions} perguntas! Você demonstra excelente conhecimento sobre o uso responsável da tecnologia.`;
-  } else if (score >= totalQuestions / 2) {
-    resultText.textContent = `Você acertou ${score} de ${totalQuestions} perguntas. Seu conhecimento é bom, mas há espaço para melhorias. Revise o manual para aprimorar suas práticas.`;
-  } else {
-    resultText.textContent = `Você acertou ${score} de ${totalQuestions} perguntas. Recomendamos que você revise cuidadosamente o manual de uso responsável da tecnologia.`;
-  }
-
-  quizResult.style.display = "block";
-  quizResult.scrollIntoView({ behavior: "smooth" });
-});
-
-document.getElementById("restart-quiz").addEventListener("click", () => {
-  // Remove seleções
-  document.querySelectorAll(".quiz-option").forEach((option) => {
-    option.classList.remove("selected");
+// Reiniciar quiz
+const restartBtn = document.getElementById("restart-quiz");
+if (restartBtn) {
+  restartBtn.addEventListener("click", () => {
+    // reset visual e estado
+    document.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected", "correct", "incorrect", "locked"));
+    document.querySelectorAll(".quiz-question").forEach((q) => {
+      delete q.dataset.answered;
+      const fb = q.querySelector('.feedback');
+      if (fb) fb.remove();
+    });
+    totalScore = 0;
+    answeredCount = 0;
+    if (quizResult) quizResult.style.display = "none";
+    if (quizControls) quizControls.style.display = "flex";
+    showQuestion(0);
+    document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
   });
-
-  // Esconde resultado
-  document.getElementById("quiz-result").style.display = "none";
-
-  // Rola para o topo do quiz
-  document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
-});
+}
