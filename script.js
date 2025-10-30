@@ -38,7 +38,18 @@ const nextBtn = document.getElementById("next-question");
 const checkBtn = document.getElementById("check-answers");
 const quizResult = document.getElementById("quiz-result");
 const quizControls = document.getElementById("quiz-controls");
+const playerForm = document.getElementById("player-form");
+const startBtn = document.getElementById("start-quiz");
+const playerNameInput = document.getElementById("player-name");
+const playerSectorInput = document.getElementById("player-sector");
+const playerMsg = document.getElementById("player-msg");
+const progressEl = document.getElementById("progress");
+const leaderboardDiv = document.getElementById("leaderboard");
+const leaderboardList = document.getElementById("leaderboard-list");
 let currentIndex = 0;
+let quizStarted = false;
+let playerName = "";
+let playerSector = "";
 
 function showQuestion(index) {
   if (questions.length === 0) return;
@@ -49,20 +60,66 @@ function showQuestion(index) {
   // Atualiza estado dos botões
   if (prevBtn) prevBtn.disabled = currentIndex === 0;
   if (nextBtn) nextBtn.disabled = currentIndex === questions.length - 1;
+  // atualiza progresso
+  if (progressEl) {
+    progressEl.style.display = quizStarted ? "block" : "none";
+    progressEl.textContent = `Pergunta ${currentIndex + 1} de ${questions.length}`;
+  }
 }
 
 // Inicializa exibição
 showQuestion(0);
 
+// esconder controles até o usuário iniciar
+if (quizControls) quizControls.style.display = "none";
+if (progressEl) progressEl.style.display = "none";
+if (leaderboardDiv) leaderboardDiv.style.display = "none";
+
 // Seleção de opção (escopo por pergunta)
 document.querySelectorAll(".quiz-option").forEach((option) => {
   option.addEventListener("click", () => {
+    if (!quizStarted) {
+      showPlayerMessage("Por favor, preencha seu nome e setor e clique em Começar antes de responder.");
+      return;
+    }
     const parentQuestion = option.closest(".quiz-question");
     if (!parentQuestion) return;
     parentQuestion.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected"));
     option.classList.add("selected");
   });
 });
+
+// Iniciar quiz após preencher nome/setor
+function showPlayerMessage(text) {
+  if (!playerMsg) {
+    alert(text);
+    return;
+  }
+  playerMsg.textContent = text;
+  playerMsg.style.display = "block";
+  setTimeout(() => {
+    playerMsg.style.display = "";
+  }, 3500);
+}
+
+if (startBtn) {
+  startBtn.addEventListener("click", () => {
+    const name = playerNameInput ? playerNameInput.value.trim() : "";
+    const sector = playerSectorInput ? playerSectorInput.value.trim() : "";
+    if (!name || !sector) {
+      showPlayerMessage("Por favor, preencha seu nome e setor antes de começar.");
+      return;
+    }
+    playerName = name;
+    playerSector = sector;
+    quizStarted = true;
+    // esconder form e mostrar controles
+    if (playerForm) playerForm.style.display = "none";
+    if (quizControls) quizControls.style.display = "flex";
+    if (progressEl) progressEl.style.display = "block";
+    showQuestion(0);
+  });
+}
 
 if (prevBtn) {
   prevBtn.addEventListener("click", () => {
@@ -82,6 +139,10 @@ let answeredCount = 0;
 
 if (checkBtn) {
   checkBtn.addEventListener("click", () => {
+    if (!quizStarted) {
+      showPlayerMessage("Você precisa começar o quiz antes de verificar respostas.");
+      return;
+    }
     const question = questions[currentIndex];
     if (!question) return;
 
@@ -142,12 +203,17 @@ if (checkBtn) {
     // trava opções desta pergunta
     question.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.add("locked"));
 
-    // se todas respondidas, mostra resultado final
+    // se todas respondidas, mostra resultado final e salva no ranking
     if (answeredCount === questions.length) {
       const resultText = document.getElementById("result-text");
       if (resultText && quizResult) {
         resultText.textContent = `Você acertou ${totalScore} de ${questions.length} perguntas.`;
         quizResult.style.display = "block";
+        // salvar entrada no leaderboard usando nome/setor fornecidos
+        if (playerName && playerSector) {
+          saveScoreToLeaderboard(playerName, playerSector, totalScore);
+        }
+        renderLeaderboard();
         quizResult.scrollIntoView({ behavior: "smooth" });
       }
     }
@@ -167,9 +233,62 @@ if (restartBtn) {
     });
     totalScore = 0;
     answeredCount = 0;
+    // esconder resultado e leaderboard, voltar ao formulário
     if (quizResult) quizResult.style.display = "none";
-    if (quizControls) quizControls.style.display = "flex";
+    if (leaderboardDiv) leaderboardDiv.style.display = "none";
+    if (quizControls) quizControls.style.display = "none";
+    if (playerForm) playerForm.style.display = "flex";
+    if (playerNameInput) playerNameInput.value = "";
+    if (playerSectorInput) playerSectorInput.value = "";
+    playerName = "";
+    playerSector = "";
+    quizStarted = false;
     showQuestion(0);
+    if (progressEl) progressEl.style.display = "none";
     document.getElementById("quiz").scrollIntoView({ behavior: "smooth" });
   });
+}
+
+// --- Leaderboard / Persistência (localStorage) ---
+function getLeaderboard() {
+  try {
+    const raw = localStorage.getItem("quiz_leaderboard");
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error("Erro ao ler leaderboard:", e);
+    return [];
+  }
+}
+
+function saveScoreToLeaderboard(name, sector, score) {
+  if (!name || !sector) return getLeaderboard();
+  const board = getLeaderboard();
+  board.push({ name: name.trim(), sector: sector.trim(), score: Number(score), date: new Date().toISOString() });
+  // ordenar desc por score, empates por data (mais recente primeiro)
+  board.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
+  try {
+    localStorage.setItem("quiz_leaderboard", JSON.stringify(board));
+  } catch (e) {
+    console.error("Erro ao salvar leaderboard:", e);
+  }
+  return board;
+}
+
+function renderLeaderboard(list) {
+  if (!leaderboardList || !leaderboardDiv) return;
+  leaderboardList.innerHTML = "";
+  const top = (list || getLeaderboard()).slice(0, 10);
+  if (top.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Nenhuma pontuação registrada ainda.";
+    leaderboardList.appendChild(li);
+  } else {
+    top.forEach((entry, idx) => {
+      const li = document.createElement("li");
+      const date = new Date(entry.date);
+      li.innerHTML = `<strong>#${idx + 1} ${entry.name}</strong> (${entry.sector}) — ${entry.score} pts <span style="color:#6b7280; font-size:0.9rem;"> — ${date.toLocaleDateString()} ${date.toLocaleTimeString()}</span>`;
+      leaderboardList.appendChild(li);
+    });
+  }
+  leaderboardDiv.style.display = "block";
 }

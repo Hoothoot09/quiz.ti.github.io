@@ -158,6 +158,34 @@ li {
   margin-top: 1rem;
 }
 
+/* formulário inicial de jogador */
+.player-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.player-form input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.player-msg {
+  color: #b91c1c;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+  min-width: 200px;
+}
+
+.progress {
+  margin: 0.75rem 0 1rem 0;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
 .feedback {
   margin-top: 1rem;
   padding: 0.75rem 1rem;
@@ -190,6 +218,55 @@ li {
   padding: 0.6rem;
   border-left: 4px solid #3b82f6;
   border-radius: 4px;
+}
+
+/* Save score form and leaderboard */
+.save-score-form {
+  display: none;
+  margin-top: 1rem;
+}
+
+.save-score-form .input-small {
+  margin-left: 0.5rem;
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+}
+
+.save-score-form .label-sector {
+  margin-left: 0.75rem;
+}
+
+.save-score-form .save-controls {
+  margin-top: 0.75rem;
+}
+
+.btn-ghost {
+  background-color: #ffffff;
+  color: #1e3a8a;
+  border: 1px solid #cbd5e1;
+}
+
+.leaderboard {
+  display: none;
+  margin-top: 1rem;
+  text-align: left;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #e6eefb;
+}
+
+#leaderboard-list li {
+  padding: 0.35rem 0;
+}
+
+.leaderboard h4 {
+  margin: 0 0 0.5rem 0;
+}
+
+.mt-1 {
+  margin-top: 1rem;
 }
 
 .quiz-question {

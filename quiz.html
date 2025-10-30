@@ -27,6 +27,17 @@
         </p>
 
         <div class="quiz-container">
+          <!-- formulário para coletar nome e setor antes de iniciar -->
+          <div id="player-form" class="player-form">
+            <label for="player-name">Nome:</label>
+            <input id="player-name" type="text" placeholder="Seu nome" />
+            <label for="player-sector">Setor:</label>
+            <input id="player-sector" type="text" placeholder="Seu setor" />
+            <button id="start-quiz" class="btn">Começar</button>
+            <div id="player-msg" class="player-msg" aria-live="polite"></div>
+          </div>
+
+          <div id="progress" class="progress">Pergunta 1 de 1</div>
           <div class="quiz-question">
             <h3>
               1. Ao encerrar o uso do computador, qual é o procedimento correto
@@ -499,7 +510,14 @@
           <div id="quiz-result" class="quiz-result">
             <h3>Resultado do Quiz</h3>
             <p id="result-text"></p>
-            <button id="restart-quiz" class="btn">Refazer Quiz</button>
+
+            <!-- Área de leaderboard -->
+            <div id="leaderboard" class="leaderboard">
+              <h4>Ranking</h4>
+              <ol id="leaderboard-list"></ol>
+            </div>
+
+            <button id="restart-quiz" class="btn mt-1">Refazer Quiz</button>
           </div>
         </div>
 
