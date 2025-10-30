@@ -1,8 +1,12 @@
 // Navegação por abas (se existir)
 document.querySelectorAll(".tab-button").forEach((button) => {
   button.addEventListener("click", () => {
-    document.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
-    document.querySelectorAll(".content-section").forEach((section) => section.classList.remove("active"));
+    document
+      .querySelectorAll(".tab-button")
+      .forEach((btn) => btn.classList.remove("active"));
+    document
+      .querySelectorAll(".content-section")
+      .forEach((section) => section.classList.remove("active"));
     button.classList.add("active");
     const tabId = button.getAttribute("data-tab");
     const target = document.getElementById(tabId);
@@ -63,7 +67,9 @@ function showQuestion(index) {
   // atualiza progresso
   if (progressEl) {
     progressEl.style.display = quizStarted ? "block" : "none";
-    progressEl.textContent = `Pergunta ${currentIndex + 1} de ${questions.length}`;
+    progressEl.textContent = `Pergunta ${currentIndex + 1} de ${
+      questions.length
+    }`;
   }
 }
 
@@ -79,12 +85,16 @@ if (leaderboardDiv) leaderboardDiv.style.display = "none";
 document.querySelectorAll(".quiz-option").forEach((option) => {
   option.addEventListener("click", () => {
     if (!quizStarted) {
-      showPlayerMessage("Por favor, preencha seu nome e setor e clique em Começar antes de responder.");
+      showPlayerMessage(
+        "Por favor, preencha seu nome e setor e clique em Começar antes de responder."
+      );
       return;
     }
     const parentQuestion = option.closest(".quiz-question");
     if (!parentQuestion) return;
-    parentQuestion.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected"));
+    parentQuestion
+      .querySelectorAll(".quiz-option")
+      .forEach((opt) => opt.classList.remove("selected"));
     option.classList.add("selected");
   });
 });
@@ -107,7 +117,9 @@ if (startBtn) {
     const name = playerNameInput ? playerNameInput.value.trim() : "";
     const sector = playerSectorInput ? playerSectorInput.value.trim() : "";
     if (!name || !sector) {
-      showPlayerMessage("Por favor, preencha seu nome e setor antes de começar.");
+      showPlayerMessage(
+        "Por favor, preencha seu nome e setor antes de começar."
+      );
       return;
     }
     playerName = name;
@@ -140,7 +152,9 @@ let answeredCount = 0;
 if (checkBtn) {
   checkBtn.addEventListener("click", () => {
     if (!quizStarted) {
-      showPlayerMessage("Você precisa começar o quiz antes de verificar respostas.");
+      showPlayerMessage(
+        "Você precisa começar o quiz antes de verificar respostas."
+      );
       return;
     }
     const question = questions[currentIndex];
@@ -162,7 +176,8 @@ if (checkBtn) {
     }
 
     if (!selected) {
-      feedback.innerHTML = '<p class="warning">Por favor, selecione uma opção antes de verificar.</p>';
+      feedback.innerHTML =
+        '<p class="warning">Por favor, selecione uma opção antes de verificar.</p>';
       feedback.scrollIntoView({ behavior: "smooth" });
       return;
     }
@@ -172,15 +187,18 @@ if (checkBtn) {
     if (isCorrect) {
       totalScore++;
       selected.classList.add("correct");
-      feedback.innerHTML = '<p class="correct-msg">Correto! Você ganhou 1 ponto.</p>';
+      feedback.innerHTML =
+        '<p class="correct-msg">Correto! Você ganhou 1 ponto.</p>';
     } else {
       selected.classList.add("incorrect");
-      const correctOpt = question.querySelector('.quiz-option[data-correct="true"]');
+      const correctOpt = question.querySelector(
+        '.quiz-option[data-correct="true"]'
+      );
       if (correctOpt) {
         correctOpt.classList.add("correct");
         // extrai letra e texto da opção correta
         const strong = correctOpt.querySelector("strong");
-        const letter = strong ? strong.textContent.trim() : ""
+        const letter = strong ? strong.textContent.trim() : "";
         const text = correctOpt.textContent.replace(letter, "").trim();
         feedback.innerHTML = `<p class="incorrect-msg">Errado. A resposta correta é <strong>${letter}</strong> ${text}.</p>`;
       } else {
@@ -201,7 +219,9 @@ if (checkBtn) {
     answeredCount++;
 
     // trava opções desta pergunta
-    question.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.add("locked"));
+    question
+      .querySelectorAll(".quiz-option")
+      .forEach((opt) => opt.classList.add("locked"));
 
     // se todas respondidas, mostra resultado final e salva no ranking
     if (answeredCount === questions.length) {
@@ -225,10 +245,14 @@ const restartBtn = document.getElementById("restart-quiz");
 if (restartBtn) {
   restartBtn.addEventListener("click", () => {
     // reset visual e estado
-    document.querySelectorAll(".quiz-option").forEach((opt) => opt.classList.remove("selected", "correct", "incorrect", "locked"));
+    document
+      .querySelectorAll(".quiz-option")
+      .forEach((opt) =>
+        opt.classList.remove("selected", "correct", "incorrect", "locked")
+      );
     document.querySelectorAll(".quiz-question").forEach((q) => {
       delete q.dataset.answered;
-      const fb = q.querySelector('.feedback');
+      const fb = q.querySelector(".feedback");
       if (fb) fb.remove();
     });
     totalScore = 0;
@@ -263,9 +287,16 @@ function getLeaderboard() {
 function saveScoreToLeaderboard(name, sector, score) {
   if (!name || !sector) return getLeaderboard();
   const board = getLeaderboard();
-  board.push({ name: name.trim(), sector: sector.trim(), score: Number(score), date: new Date().toISOString() });
+  board.push({
+    name: name.trim(),
+    sector: sector.trim(),
+    score: Number(score),
+    date: new Date().toISOString(),
+  });
   // ordenar desc por score, empates por data (mais recente primeiro)
-  board.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
+  board.sort(
+    (a, b) => b.score - a.score || new Date(b.date) - new Date(a.date)
+  );
   try {
     localStorage.setItem("quiz_leaderboard", JSON.stringify(board));
   } catch (e) {
@@ -286,7 +317,11 @@ function renderLeaderboard(list) {
     top.forEach((entry, idx) => {
       const li = document.createElement("li");
       const date = new Date(entry.date);
-      li.innerHTML = `<strong>#${idx + 1} ${entry.name}</strong> (${entry.sector}) — ${entry.score} pts <span style="color:#6b7280; font-size:0.9rem;"> — ${date.toLocaleDateString()} ${date.toLocaleTimeString()}</span>`;
+      li.innerHTML = `<strong>#${idx + 1} ${entry.name}</strong> (${
+        entry.sector
+      }) — ${
+        entry.score
+      } pts <span style="color:#6b7280; font-size:0.9rem;"> — ${date.toLocaleDateString()} ${date.toLocaleTimeString()}</span>`;
       leaderboardList.appendChild(li);
     });
   }
