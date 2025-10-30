@@ -249,6 +249,31 @@ li {
   content: "🔗";
   margin-right: 0.4rem;
   display: inline-block;
+  /* tamanho base da explicação */
+  font-size: 0.9rem; /* ajustado conforme solicitado */
+  line-height: 1.35;
+  color: #374151;
+}
+
+/* fonte da explicação (menor e itálico) */
+.source {
+  margin-top: 0.25rem; /* reduzido para ficar mais próximo */
+  font-size: 0.75rem; /* menor que a explicação */
+  color: #3b82f680; /* cor com contraste maior */
+  font-style: italic;
+  overflow-wrap: anywhere; /* permite quebrar URLs longas */
+  word-break: break-word;
+}
+.explanation .source a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* ícone antes do texto da fonte */
+.explanation .source::before {
+  content: "🔗";
+  margin-right: 0.4rem;
+  display: inline-block;
 }
 
 /* Save score form and leaderboard */
