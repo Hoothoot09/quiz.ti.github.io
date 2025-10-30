@@ -189,12 +189,15 @@ if (checkBtn) {
     }
 
     // explicação (se existir data-explanation na pergunta)
-    const explanation = question.dataset.explanation;
-    if (explanation) {
-      feedback.innerHTML += `<div class="explanation">${explanation}</div>`;
-    } else {
-      feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
-    }
+      let explanation = question.dataset.explanation;
+      if (explanation) {
+        // se o texto iniciar com "Explicação:" (case-insensitive), transforma essa palavra em negrito
+        // ex: "Explicação: Texto..." -> "<strong>Explicação:</strong> Texto..."
+        const replaced = explanation.replace(/^(\s*Explicação:\s*)/i, '<strong>Explicação:</strong> ');
+        feedback.innerHTML += `<div class="explanation">${replaced}</div>`;
+      } else {
+        feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
+      }
 
     // marca como respondida e evita re-pontuar
     question.dataset.answered = "true";
