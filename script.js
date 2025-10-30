@@ -190,11 +190,18 @@ if (checkBtn) {
 
     // explicação (se existir data-explanation na pergunta)
       let explanation = question.dataset.explanation;
+      const source = question.dataset.source || question.dataset.fonte;
       if (explanation) {
         // se o texto iniciar com "Explicação:" (case-insensitive), transforma essa palavra em negrito
         // ex: "Explicação: Texto..." -> "<strong>Explicação:</strong> Texto..."
         const replaced = explanation.replace(/^(\s*Explicação:\s*)/i, '<strong>Explicação:</strong> ');
-        feedback.innerHTML += `<div class="explanation">${replaced}</div>`;
+        feedback.innerHTML += `<div class="explanation">${replaced}`;
+        // se tiver fonte (data-source ou data-fonte), adiciona abaixo em itálico e menor
+        if (source) {
+          // evita duplicar o prefixo Fonte:, adiciona conforme fornecido
+          feedback.innerHTML += `<div class="source"><em>${source}</em></div>`;
+        }
+        feedback.innerHTML += `</div>`;
       } else {
         feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
       }
