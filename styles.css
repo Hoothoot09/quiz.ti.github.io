@@ -378,6 +378,19 @@ li {
   background-color: #1e3a8a;
 }
 
+/* estado visual para botões habilitados de navegação (diferente do padrão) */
+.btn.btn-enabled {
+  background-color: #10b981; /* verde suave quando ativado */
+  color: white;
+}
+
+/* aparência de botão desabilitado mais clara */
+.btn[disabled], .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(10%);
+}
+
 .btn-large {
   padding: 1rem 2rem;
   font-size: 1.1rem;

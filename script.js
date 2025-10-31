@@ -62,8 +62,18 @@ function showQuestion(index) {
     q.style.display = i === currentIndex ? "block" : "none";
   });
   // Atualiza estado dos botões
-  if (prevBtn) prevBtn.disabled = currentIndex === 0;
-  if (nextBtn) nextBtn.disabled = currentIndex === questions.length - 1;
+  if (prevBtn) {
+    prevBtn.disabled = currentIndex === 0;
+    // aplica classe visual quando habilitado
+    prevBtn.classList.toggle("btn-enabled", !prevBtn.disabled);
+  }
+  if (nextBtn) {
+    // Próxima só habilitado se a pergunta atual já foi verificada
+    const currentAnswered = questions[currentIndex].dataset.answered === "true";
+    const disableNext = currentIndex === questions.length - 1 || !currentAnswered;
+    nextBtn.disabled = disableNext;
+    nextBtn.classList.toggle("btn-enabled", !nextBtn.disabled);
+  }
   // atualiza progresso
   if (progressEl) {
     progressEl.style.display = quizStarted ? "block" : "none";
@@ -227,6 +237,18 @@ if (checkBtn) {
     // marca como respondida e evita re-pontuar
     question.dataset.answered = "true";
     answeredCount++;
+
+    // após verificar, habilita o botão Próxima (se não for a última pergunta)
+    if (nextBtn) {
+      if (currentIndex !== questions.length - 1) {
+        nextBtn.disabled = false;
+        nextBtn.classList.add("btn-enabled");
+      } else {
+        // última pergunta: mantém Próxima desabilitada
+        nextBtn.disabled = true;
+        nextBtn.classList.remove("btn-enabled");
+      }
+    }
 
     // trava opções desta pergunta
     question
