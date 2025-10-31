@@ -32,6 +32,15 @@ header {
   border-radius: 0 0 12px 12px;
 }
 
+.container-manual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .logo {
   margin: 0 auto;
   width: 400px;
@@ -56,6 +65,7 @@ header {
 
 .tab-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
   margin-bottom: 2rem;
