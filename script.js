@@ -15,25 +15,22 @@ document.querySelectorAll(".tab-button").forEach((button) => {
 });
 
 // Botão Voltar ao Topo
-const backToTopButton = document.getElementById("backToTop");
-const icon = document.getElementById("icon");
+// window.addEventListener("scroll", () => {
+//   if (!backToTopButton || !icon) return;
+//   if (window.pageYOffset > 300) {
+//     backToTopButton.classList.add("visible");
+//     icon.classList.add("visible");
+//   } else {
+//     backToTopButton.classList.remove("visible");
+//     icon.classList.remove("visible");
+//   }
+// });
 
-window.addEventListener("scroll", () => {
-  if (!backToTopButton || !icon) return;
-  if (window.pageYOffset > 300) {
-    backToTopButton.classList.add("visible");
-    icon.classList.add("visible");
-  } else {
-    backToTopButton.classList.remove("visible");
-    icon.classList.remove("visible");
-  }
-});
-
-if (backToTopButton) {
-  backToTopButton.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
+// if (backToTopButton) {
+//   backToTopButton.addEventListener("click", () => {
+//     window.scrollTo({ top: 0, behavior: "smooth" });
+//   });
+// }
 
 // --- Quiz: uma questão por vez ---
 const questions = Array.from(document.querySelectorAll(".quiz-question"));
@@ -70,7 +67,8 @@ function showQuestion(index) {
   if (nextBtn) {
     // Próxima só habilitado se a pergunta atual já foi verificada
     const currentAnswered = questions[currentIndex].dataset.answered === "true";
-    const disableNext = currentIndex === questions.length - 1 || !currentAnswered;
+    const disableNext =
+      currentIndex === questions.length - 1 || !currentAnswered;
     nextBtn.disabled = disableNext;
     nextBtn.classList.toggle("btn-enabled", !nextBtn.disabled);
   }
@@ -217,22 +215,25 @@ if (checkBtn) {
     }
 
     // explicação (se existir data-explanation na pergunta)
-      let explanation = question.dataset.explanation;
-      const source = question.dataset.source || question.dataset.fonte;
-      if (explanation) {
-        // se o texto iniciar com "Explicação:" (case-insensitive), transforma essa palavra em negrito
-        // ex: "Explicação: Texto..." -> "<strong>Explicação:</strong> Texto..."
-        const replaced = explanation.replace(/^(\s*Explicação:\s*)/i, '<strong>Explicação:</strong> ');
-        feedback.innerHTML += `<div class="explanation">${replaced}`;
-        // se tiver fonte (data-source ou data-fonte), adiciona abaixo em itálico e menor
-        if (source) {
-          // evita duplicar o prefixo Fonte:, adiciona conforme fornecido
-          feedback.innerHTML += `<div class="source"><em>${source}</em></div>`;
-        }
-        feedback.innerHTML += `</div>`;
-      } else {
-        feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
+    let explanation = question.dataset.explanation;
+    const source = question.dataset.source || question.dataset.fonte;
+    if (explanation) {
+      // se o texto iniciar com "Explicação:" (case-insensitive), transforma essa palavra em negrito
+      // ex: "Explicação: Texto..." -> "<strong>Explicação:</strong> Texto..."
+      const replaced = explanation.replace(
+        /^(\s*Explicação:\s*)/i,
+        "<strong>Explicação:</strong> "
+      );
+      feedback.innerHTML += `<div class="explanation">${replaced}`;
+      // se tiver fonte (data-source ou data-fonte), adiciona abaixo em itálico e menor
+      if (source) {
+        // evita duplicar o prefixo Fonte:, adiciona conforme fornecido
+        feedback.innerHTML += `<div class="source"><em>${source}</em></div>`;
       }
+      feedback.innerHTML += `</div>`;
+    } else {
+      feedback.innerHTML += `<div class="explanation">Sem explicação. Para adicionar, inclua <code>data-explanation="Sua explicação aqui"</code> na div <code>.quiz-question</code>.</div>`;
+    }
 
     // marca como respondida e evita re-pontuar
     question.dataset.answered = "true";

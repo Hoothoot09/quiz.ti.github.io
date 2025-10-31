@@ -435,6 +435,7 @@ li {
   z-index: 1000;
 }
 
+/* 
 .back-to-top:hover {
   background-color: #1e3a8a;
   transform: translateY(-2px);
@@ -454,7 +455,7 @@ li {
 
 .icon.visible {
   display: flex;
-}
+} */
 
 .manual-link {
   display: inline-block;
