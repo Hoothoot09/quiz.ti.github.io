@@ -14,7 +14,9 @@ document.querySelectorAll(".tab-button").forEach((button) => {
   });
 });
 
-//  Botão Voltar ao Topo
+// Botão Voltar ao Topo
+const backToTopButton = document.getElementById("backToTop");
+const icon = document.getElementById("icon-seta");
 
 window.addEventListener("scroll", () => {
   if (!backToTopButton || !icon) return;
