@@ -14,23 +14,24 @@ document.querySelectorAll(".tab-button").forEach((button) => {
   });
 });
 
-// Botão Voltar ao Topo
-// window.addEventListener("scroll", () => {
-//   if (!backToTopButton || !icon) return;
-//   if (window.pageYOffset > 300) {
-//     backToTopButton.classList.add("visible");
-//     icon.classList.add("visible");
-//   } else {
-//     backToTopButton.classList.remove("visible");
-//     icon.classList.remove("visible");
-//   }
-// });
+//  Botão Voltar ao Topo
 
-// if (backToTopButton) {
-//   backToTopButton.addEventListener("click", () => {
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-//   });
-// }
+window.addEventListener("scroll", () => {
+  if (!backToTopButton || !icon) return;
+  if (window.pageYOffset > 300) {
+    backToTopButton.classList.add("visible");
+    icon.classList.add("visible");
+  } else {
+    backToTopButton.classList.remove("visible");
+    icon.classList.remove("visible");
+  }
+});
+
+if (backToTopButton) {
+  backToTopButton.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
 
 // --- Quiz: uma questão por vez ---
 const questions = Array.from(document.querySelectorAll(".quiz-question"));

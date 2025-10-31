@@ -435,7 +435,6 @@ li {
   z-index: 1000;
 }
 
-/* 
 .back-to-top:hover {
   background-color: #1e3a8a;
   transform: translateY(-2px);
@@ -446,16 +445,16 @@ li {
   cursor: pointer;
 }
 
-.icon {
+.icon-seta {
   display: none;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
 }
 
-.icon.visible {
+.icon-seta.visible {
   display: flex;
-} */
+}
 
 .manual-link {
   display: inline-block;

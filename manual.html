@@ -9,26 +9,274 @@
   <body>
     <div class="tab-container">
       <button class="tab-button active" data-tab="quiz">
-        <span class="icon">❓</span> Quiz Interativo
+        <span class="icon-manual">❓</span> Quiz Interativo
       </button>
       <button class="tab-button" data-tab="equipamentos">
-        <span class="icon">💻</span> Uso de Equipamentos
+        <span class="icon-manual">💻</span> Uso de Equipamentos
       </button>
       <button class="tab-button" data-tab="emprestimo">
-        <span class="icon">🔄</span> Equipamentos sob Empréstimo
+        <span class="icon-manual">🔄</span> Equipamentos sob Empréstimo
       </button>
       <button class="tab-button" data-tab="acesso-remoto">
-        <span class="icon">🔒</span> Acesso Remoto
+        <span class="icon-manual">🔒</span> Acesso Remoto
       </button>
       <button class="tab-button" data-tab="spark">
-        <span class="icon">💬</span> Uso do SPARK
+        <span class="icon-manual">💬</span> Uso do SPARK
       </button>
       <button class="tab-button" data-tab="seguranca">
-        <span class="icon">🛡️</span> Segurança Digital
+        <span class="icon-manual">🛡️</span> Segurança Digital
       </button>
       <button class="tab-button" data-tab="politicas">
-        <span class="icon">📋</span> Políticas do Usuário
+        <span class="icon-manual">📋</span> Políticas do Usuário
       </button>
     </div>
+
+          <div id="quiz-result" class="quiz-result">
+            <h3>Resultado do Quiz</h3>
+            <p id="result-text"></p>
+
+            <!-- Área de leaderboard -->
+            <div id="leaderboard" class="leaderboard">
+              <h4>Ranking</h4>
+              <ol id="leaderboard-list"></ol>
+            </div>
+
+            <button id="restart-quiz" class="btn mt-1">Refazer Quiz</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de Uso de Equipamentos -->
+      <section id="equipamentos" class="content-section">
+        <h2>Uso de Equipamentos</h2>
+
+        <h3>Cuidados gerais e preservação dos equipamentos</h3>
+        <p>
+          Manter sempre os microcomputadores e notebooks atualizados para evitar
+          lentidão e problemas de drivers de software.
+        </p>
+
+        <div class="highlight-box">
+          <p>
+            <strong>OBSERVAÇÃO IMPORTANTE:</strong> Fique atento às notificações
+            localizadas no canto inferior direito, que sinalizam quando há uma
+            atualização necessária para ser feita.
+          </p>
+        </div>
+
+        <h3>Uso correto e seguro</h3>
+        <ul>
+          <li>Procedimento para ligar e desligar adequadamente</li>
+          <li>
+            Manuseio de softwares essenciais (e-mail, pastas, configurações do
+            sistema, navegador, etc.)
+          </li>
+          <li>Armazenamento e organização de arquivos</li>
+        </ul>
+      </section>
+
+      <!-- Seção de Equipamentos sob Empréstimo -->
+      <section id="emprestimo" class="content-section">
+        <h2>Equipamentos sob Empréstimo</h2>
+
+        <h3>Regras e políticas de empréstimo</h3>
+        <p>
+          Ao receber o equipamento, o colaborador assina o
+          <strong>Termo de Posse</strong>, documento que formaliza a entrega e
+          reconhece a responsabilidade sobre o uso e a guarda do bem.
+        </p>
+
+        <p>
+          Quando o equipamento é devolvido, o colaborador assina o
+          <strong>Termo de Devolução</strong>, que confirma o retorno do item em
+          boas condições de funcionamento.
+        </p>
+
+        <h3>Manuseio adequado dos equipamentos</h3>
+        <ul>
+          <li>Segurar o dispositivo com ambas as mãos</li>
+          <li>Não pressionar telas ou teclados com força excessiva</li>
+          <li>Conectar e desconectar cabos periféricos com cuidado</li>
+          <li>Evitar comer ou beber próximo aos equipamentos</li>
+        </ul>
+
+        <h3>Cuidados ao transportar</h3>
+        <ul>
+          <li>Sempre utilizar as maletas e cases específicos fornecidos</li>
+          <li>
+            Manter os equipamentos longe de extremos de temperatura e umidade
+          </li>
+          <li>Evitar movimentos bruscos durante o deslocamento</li>
+          <li>Proteger contra chuva e impactos</li>
+        </ul>
+      </section>
+
+      <!-- Seção de Acesso Remoto -->
+      <section id="acesso-remoto" class="content-section">
+        <h2>Softwares de Acesso Remoto</h2>
+
+        <h3>Funcionalidades principais</h3>
+        <p>
+          Os softwares de acesso remoto permitem conectar-se a outros
+          computadores à distância, facilitando o suporte técnico e o trabalho
+          remoto.
+        </p>
+
+        <h3>Procedimentos para iniciar e finalizar conexões</h3>
+        <ol>
+          <li>
+            Verificar se o software está devidamente instalado e atualizado
+          </li>
+          <li>Utilizar credenciais autorizadas para estabelecer a conexão</li>
+          <li>Seguir os protocolos de segurança durante a sessão remota</li>
+          <li>Encerrar corretamente a conexão ao finalizar o trabalho</li>
+        </ol>
+
+        <h3>Boas práticas de uso</h3>
+        <ul>
+          <li>Manter sigilo das senhas e credenciais de acesso</li>
+          <li>Evitar acesso indevido a sistemas não autorizados</li>
+          <li>Registrar todas as sessões de acesso remoto</li>
+        </ul>
+      </section>
+
+      <!-- Seção do SPARK -->
+      <section id="spark" class="content-section">
+        <h2>Uso do SPARK</h2>
+
+        <h3>O que é o SPARK?</h3>
+        <p>
+          O SPARK é uma ferramenta de comunicação corporativa desenvolvida para
+          facilitar a troca de informações entre colaboradores, promover o
+          trabalho em equipe e garantir uma comunicação rápida e eficiente
+          dentro da empresa.
+        </p>
+
+        <h3>Uso adequado no ambiente corporativo</h3>
+        <p>
+          O SPARK deve ser utilizado exclusivamente para assuntos relacionados
+          ao ambiente de trabalho. Por ser um canal oficial da empresa, todas as
+          conversas devem manter um tom profissional, respeitoso e alinhado às
+          políticas internas de conduta.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Abertura do SPARK ao Iniciar o Expediente</h3>
+          <p>
+            É fundamental que o colaborador abra o SPARK assim que iniciar sua
+            jornada de trabalho. Isso garante que ele esteja disponível para
+            receber comunicados, solicitações e instruções da equipe ou da
+            liderança.
+          </p>
+        </div>
+      </section>
+
+      <!-- Seção de Segurança Digital -->
+      <section id="seguranca" class="content-section">
+        <h2>Segurança Digital</h2>
+
+        <h3>Uso de senhas fortes</h3>
+        <ul>
+          <li>
+            Utilizar combinações de letras maiúsculas e minúsculas, números e
+            símbolos
+          </li>
+          <li>Evitar informações pessoais óbvias em senhas</li>
+          <li>Não reutilizar senhas entre diferentes sistemas</li>
+          <li>Alterar senhas periodicamente</li>
+        </ul>
+
+        <h3>Autenticação em dois fatores</h3>
+        <p>
+          Sempre que disponível, ative a autenticação em dois fatores para
+          adicionar uma camada extra de segurança às suas contas.
+        </p>
+
+        <h3>Antivírus</h3>
+        <p>
+          Mantenha o software antivírus sempre atualizado e execute verificações
+          regulares em seu equipamento.
+        </p>
+
+        <h3>Conscientização sobre ameaças</h3>
+        <ul>
+          <li>
+            Phishing: Desconfie de e-mails suspeitos solicitando informações
+            pessoais
+          </li>
+          <li>
+            Malware: Evite clicar em links ou baixar arquivos de fontes não
+            confiáveis
+          </li>
+          <li>
+            Engenharia social: Esteja atento a tentativas de manipulação para
+            obter informações confidenciais
+          </li>
+        </ul>
+
+        <h3>Backup de dados importantes</h3>
+        <p>
+          Realize backups regulares de arquivos importantes em locais seguros e
+          autorizados pela empresa.
+        </p>
+      </section>
+
+      <!-- Seção de Políticas do Usuário -->
+      <section id="politicas" class="content-section">
+        <h2>Políticas do Usuário</h2>
+
+        <h3>Responsabilidade sobre os dados</h3>
+        <p>
+          Cada profissional é responsável pelos dados que acessa, utiliza ou
+          compartilha. É essencial agir com cuidado, evitando o repasse de
+          informações sem autorização e assegurando que os dados sejam usados
+          apenas para fins legítimos e dentro das políticas da empresa.
+        </p>
+
+        <div class="highlight-box">
+          <h3>Principais Responsabilidades</h3>
+          <ul>
+            <li>
+              Zelar pela integridade e confidencialidade das informações
+              corporativas
+            </li>
+            <li>
+              Reportar imediatamente qualquer suspeita de violação de dados
+            </li>
+            <li>
+              Utilizar os recursos tecnológicos apenas para fins profissionais
+              autorizados
+            </li>
+            <li>
+              Cumprir todas as políticas de segurança da informação
+              estabelecidas pela empresa
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <div class="highlight-box">
+          <h3>📘 Manual Completo em PDF</h3>
+          <p>
+            Para acessar o guia completo em formato PDF interativo, clique no
+            botão abaixo:
+          </p>
+          <a href="#" class="btn manual-link">
+            <span class="icon">📥</span> Baixar Manual em PDF
+          </a>
+          <p>
+            <small
+              >O PDF inclui botões clicáveis, links internos, ícones e recursos
+              avançados de navegação.</small
+            >
+          </p>
+        </div>
+
+    
+    <div class="back-to-top" id="backToTop">
+      <span class="icon-seta" id="icon">↑</span>
+    </div>
+
   </body>
 </html>
