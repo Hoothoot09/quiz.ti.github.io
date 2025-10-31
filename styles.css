@@ -76,7 +76,24 @@ header {
   gap: 0.5rem;
 }
 
-.tab-button:hover {
+.tab-link {
+  background-color: white;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--dark-gray);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.tab-button:hover,
+.tab-link:hover {
   background-color: var(--light-blue);
   transform: translateY(-2px);
 }
