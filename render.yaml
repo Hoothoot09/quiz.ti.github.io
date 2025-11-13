@@ -1,0 +1,16 @@
+# Render service manifest (template). Edit `repo` and `branch` if desired.
+# Use this file when creating a service via Infrastructure as Code on Render.
+
+services:
+  - type: web
+    name: quiz-api
+    env: node
+    plan: free
+    repo: Hoothoot09/quiz.ti.github.io
+    branch: main
+    buildCommand: cd server && npm install
+    startCommand: cd server && node index.js
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false

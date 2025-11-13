@@ -49,6 +49,57 @@ Se `data-explanation` não existir, o quiz mostrará uma mensagem orientando com
 # Com Live Server: abra a pasta no VS Code e clique em "Go Live" na barra de status.
 ```
 
+## Configurar persistência centralizada (opcional)
+
+Se você quer que o leaderboard seja compartilhado entre diferentes usuários/locais, é preciso apontar o cliente para uma API que armazene as pontuações. O `script.js` agora lê a URL da API de três formas (prioridade nesta ordem):
+
+1. Meta tag no HTML
+
+```html
+<!-- no <head> do seu quiz.html -->
+<meta name="quiz-api-url" content="http://localhost:3000">
+```
+
+1. Objeto global JavaScript
+
+```html
+<!-- antes de carregar script.js -->
+<script>
+  window.QUIZ_CONFIG = { apiUrl: 'https://meu-servidor.com' };
+</script>
+```
+
+1. Variável global simples
+
+```html
+<script>
+  window.API_URL = 'https://meu-servidor.com';
+</script>
+```
+
+Se nenhuma dessas opções for usada, o comportamento padrão é salvar as pontuações no `localStorage` do navegador (offline/local only).
+
+### Testando localmente com o servidor de exemplo
+
+No diretório `server/` deste repositório há um protótipo de API (Node.js + Express + lowdb) para testes rápidos. Para executá-lo localmente:
+
+1. Abra um terminal PowerShell e navegue até a pasta `server`:
+
+```powershell
+cd server
+```
+
+1. Instale as dependências e inicie o servidor:
+
+```powershell
+npm install
+npm start
+```
+
+1. Configure o cliente (ex: via meta tag) com `http://localhost:3000` e abra `quiz.html` no navegador.
+
+O endpoint exposto é `GET /leaderboard` (lista) e `POST /leaderboard` (adiciona uma entrada `{ name, sector, score }`).
+
 ## Teste rápido (fluxo esperado)
 
 1. Abra `quiz.html`.

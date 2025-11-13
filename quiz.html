@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- API URL para testes locais: altere se necessário -->
+  <meta name="quiz-api-url" content="http://localhost:3000">
     <link rel="stylesheet" href="styles.css" />
     <title>Guia de Uso Responsável da Tecnologia</title>
   </head>
@@ -803,7 +805,17 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             </button>
           </div>
 
-          <a href="/manual.html">Manual</a>
-    <script src="/script.js"></script>
+          <!-- Resultado e leaderboard -->
+          <div id="quiz-result" class="quiz-result">
+            <h3>Resultado do Quiz</h3>
+            <p id="result-text"></p>
+            <div id="leaderboard" class="leaderboard">
+              <ul id="leaderboard-list"></ul>
+            </div>
+            <button id="restart-quiz" class="btn">Refazer Quiz</button>
+          </div>
+
+          <a href="manual.html">Manual</a>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -50,6 +50,27 @@ const playerMsg = document.getElementById("player-msg");
 const progressEl = document.getElementById("progress");
 const leaderboardDiv = document.getElementById("leaderboard");
 const leaderboardList = document.getElementById("leaderboard-list");
+// A URL da API pode ser configurada de 3 formas (ordem de prioridade):
+// 1) meta tag no HTML: <meta name="quiz-api-url" content="https://meu-servidor.com">
+// 2) objeto global: window.QUIZ_CONFIG = { apiUrl: 'https://meu-servidor.com' }
+// 3) variável global simples: window.API_URL = 'https://meu-servidor.com'
+// Se nenhuma for fornecida, fica vazia e o código usa localStorage como fallback.
+const API_URL = (function () {
+  try {
+    const meta = document.querySelector('meta[name="quiz-api-url"]');
+    if (meta && meta.content) return meta.content.trim();
+  } catch (e) {
+    // ignore
+  }
+  try {
+    if (window && window.QUIZ_CONFIG && window.QUIZ_CONFIG.apiUrl)
+      return window.QUIZ_CONFIG.apiUrl;
+  } catch (e) {}
+  try {
+    if (window && window.API_URL) return window.API_URL;
+  } catch (e) {}
+  return "";
+})();
 let currentIndex = 0;
 let quizStarted = false;
 let playerName = "";
@@ -161,7 +182,7 @@ let totalScore = 0;
 let answeredCount = 0;
 
 if (checkBtn) {
-  checkBtn.addEventListener("click", () => {
+  checkBtn.addEventListener("click", async () => {
     if (!quizStarted) {
       showPlayerMessage(
         "Você precisa começar o quiz antes de verificar respostas."
@@ -264,12 +285,26 @@ if (checkBtn) {
       const resultText = document.getElementById("result-text");
       if (resultText && quizResult) {
         resultText.textContent = `Você acertou ${totalScore} de ${questions.length} perguntas.`;
+        // mostrar resultado
         quizResult.style.display = "block";
-        // salvar entrada no leaderboard usando nome/setor fornecidos
+        // salvar entrada no leaderboard usando nome/setor fornecidos (tenta servidor, senão localStorage)
+        let savedList = null;
         if (playerName && playerSector) {
-          saveScoreToLeaderboard(playerName, playerSector, totalScore);
+          savedList = await saveScoreToLeaderboard(playerName, playerSector, totalScore);
         }
-        renderLeaderboard();
+        // tentar obter versão mais atualizada do servidor quando disponível
+        let latest = null;
+        if (API_URL) {
+          latest = await fetchLeaderboardFromServer();
+        }
+        // renderiza leaderboard: preferir latest (servidor), depois savedList (retorno da função), depois local
+        if (latest && Array.isArray(latest)) {
+          renderLeaderboard(latest);
+        } else if (savedList && Array.isArray(savedList)) {
+          renderLeaderboard(savedList);
+        } else {
+          renderLeaderboard();
+        }
         quizResult.scrollIntoView({ behavior: "smooth" });
       }
     }
@@ -320,46 +355,162 @@ function getLeaderboard() {
   }
 }
 
-function saveScoreToLeaderboard(name, sector, score) {
+async function fetchLeaderboardFromServer() {
+  if (!API_URL) return null;
+  try {
+    const res = await fetch(`${API_URL.replace(/\/$/, "")}/leaderboard`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const list = await res.json();
+    // clear previous error flag
+    try { delete window.LAST_LEADERBOARD_ERROR; } catch (e) {}
+    return list;
+  } catch (e) {
+    console.warn("Não foi possível buscar leaderboard do servidor:", e);
+    try { window.LAST_LEADERBOARD_ERROR = e.message || String(e); } catch (err) {}
+    return null;
+  }
+}
+
+async function saveScoreToServer(entry) {
+  if (!API_URL) return null;
+  try {
+    const res = await fetch(`${API_URL.replace(/\/$/, "")}/leaderboard`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entry),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const list = await res.json();
+    try { delete window.LAST_LEADERBOARD_ERROR; } catch (e) {}
+    return list;
+  } catch (e) {
+    console.warn("Erro ao salvar no servidor:", e);
+    try { window.LAST_LEADERBOARD_ERROR = e.message || String(e); } catch (err) {}
+    return null;
+  }
+}
+
+// salva no servidor se API_URL configurada, caso contrário usa localStorage
+async function saveScoreToLeaderboard(name, sector, score) {
   if (!name || !sector) return getLeaderboard();
+  const entry = { name: name.trim(), sector: sector.trim(), score: Number(score), date: new Date().toISOString() };
+
+  if (API_URL) {
+    const serverList = await saveScoreToServer(entry);
+    if (serverList) {
+      // armazena também localmente para fallback/offline
+      try {
+        localStorage.setItem("quiz_leaderboard", JSON.stringify(serverList));
+      } catch (e) {
+        console.warn("Não foi possível salvar cópia local do leaderboard:", e);
+      }
+      return serverList;
+    }
+    // se falhou no servidor, cai para local
+  }
+
+  // fallback: localStorage
   const board = getLeaderboard();
-  board.push({
-    name: name.trim(),
-    sector: sector.trim(),
-    score: Number(score),
-    date: new Date().toISOString(),
-  });
-  // ordenar desc por score, empates por data (mais recente primeiro)
-  board.sort(
-    (a, b) => b.score - a.score || new Date(b.date) - new Date(a.date)
-  );
+  board.push(entry);
+  board.sort((a, b) => b.score - a.score || new Date(b.date) - new Date(a.date));
   try {
     localStorage.setItem("quiz_leaderboard", JSON.stringify(board));
   } catch (e) {
-    console.error("Erro ao salvar leaderboard:", e);
+    console.error("Erro ao salvar leaderboard local:", e);
   }
   return board;
 }
 
 function renderLeaderboard(list) {
   if (!leaderboardList || !leaderboardDiv) return;
+  console.log('renderLeaderboard called. items passed:', Array.isArray(list) ? list.length : 'null');
   leaderboardList.innerHTML = "";
   const top = (list || getLeaderboard()).slice(0, 10);
+  // remove existing header if present to avoid duplicates
+  const parent = leaderboardList.parentNode;
+  if (parent) {
+    const existingHeader = parent.querySelector('.leaderboard-header');
+    if (existingHeader) existingHeader.remove();
+  }
+  // header
+  const header = document.createElement('div');
+  header.className = 'leaderboard-header';
+  const title = document.createElement('div');
+  title.className = 'leaderboard-title';
+  title.textContent = 'Ranking — Top 10';
+  const sub = document.createElement('div');
+  sub.className = 'leaderboard-sub';
+  sub.textContent = `${top.length} registro${top.length !== 1 ? 's' : ''}`;
+  header.appendChild(title);
+  header.appendChild(sub);
+  // ensure header is shown above the list
+  if (parent) parent.insertBefore(header, leaderboardList);
+
+  // if there was an error fetching from server, show message
+  try {
+    if (window.LAST_LEADERBOARD_ERROR) {
+      const errEl = parent.querySelector('.leaderboard-error');
+      if (errEl) errEl.remove();
+      const err = document.createElement('div');
+      err.className = 'leaderboard-error';
+      err.textContent = 'Não foi possível carregar o ranking do servidor. Exibindo dados locais.';
+      parent.insertBefore(err, header.nextSibling);
+      console.warn('Leaderboard error flag:', window.LAST_LEADERBOARD_ERROR);
+    } else {
+      const oldErr = parent.querySelector('.leaderboard-error');
+      if (oldErr) oldErr.remove();
+    }
+  } catch (e) {
+    console.warn('Erro ao processar mensagem de erro do leaderboard', e);
+  }
+
   if (top.length === 0) {
-    const li = document.createElement("li");
-    li.textContent = "Nenhuma pontuação registrada ainda.";
+    const li = document.createElement('li');
+    li.textContent = 'Nenhuma pontuação registrada ainda.';
     leaderboardList.appendChild(li);
   } else {
     top.forEach((entry, idx) => {
-      const li = document.createElement("li");
-      const date = new Date(entry.date);
-      li.innerHTML = `<strong>#${idx + 1} ${entry.name}</strong> (${
-        entry.sector
-      }) — ${
-        entry.score
-      } pts <span style="color:#6b7280; font-size:0.9rem;"> — ${date.toLocaleDateString()} ${date.toLocaleTimeString()}</span>`;
+      const li = document.createElement('li');
+      li.className = 'leaderboard-item';
+
+      const left = document.createElement('div');
+      left.className = 'leader-left';
+      const rank = document.createElement('div');
+      rank.className = 'rank-badge';
+      rank.textContent = `#${idx + 1}`;
+      if (idx === 0) rank.classList.add('top1');
+      else if (idx === 1) rank.classList.add('top2');
+      else if (idx === 2) rank.classList.add('top3');
+
+      const meta = document.createElement('div');
+      meta.className = 'leader-meta';
+      const nameEl = document.createElement('div');
+      nameEl.className = 'name';
+      nameEl.textContent = entry.name;
+      const sectorEl = document.createElement('div');
+      sectorEl.className = 'sector';
+      sectorEl.textContent = entry.sector || '';
+      meta.appendChild(nameEl);
+      meta.appendChild(sectorEl);
+
+      left.appendChild(rank);
+      left.appendChild(meta);
+
+      const right = document.createElement('div');
+      right.className = 'leader-right';
+      const score = document.createElement('div');
+      score.className = 'score-badge';
+      score.textContent = `${entry.score} pts`;
+      const date = document.createElement('div');
+      date.className = 'leader-date';
+      date.textContent = new Date(entry.date).toLocaleString();
+      right.appendChild(score);
+      right.appendChild(date);
+
+      li.appendChild(left);
+      li.appendChild(right);
       leaderboardList.appendChild(li);
     });
   }
-  leaderboardDiv.style.display = "block";
+  leaderboardDiv.style.display = 'block';
 }

@@ -1,0 +1,32 @@
+name: Server CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU (for docker build)
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build server Docker image
+        working-directory: ./server
+        run: |
+          docker build -t quiz-api:ci .
+
+      - name: Run basic smoke check (container)
+        run: |
+          docker run --rm -d --name quiz-api-ci -p 3001:3000 quiz-api:ci
+          sleep 2
+          if curl -sS http://localhost:3001/leaderboard | grep -q "leaderboard"; then echo "smoke ok"; else echo "smoke failed"; fi
+          docker stop quiz-api-ci || true
