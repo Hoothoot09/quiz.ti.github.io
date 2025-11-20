@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: quiz
+      POSTGRES_PASSWORD: quizpass
+      POSTGRES_DB: quizdb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/server/db.sql:/docker-entrypoint-initdb.d/db.sql:ro
+    networks:
+      - quiznet
+
+  backend:
+    build:
+      context: ./backend/server
+    environment:
+      - DATABASE_URL=postgresql://quiz:quizpass@db:5432/quizdb
+    depends_on:
+      - db
+    volumes:
+      - ./backend/server/db.json:/usr/src/app/db.json
+    expose:
+      - "3000"
+    networks:
+      - quiznet
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - quiznet
+
+volumes:
+  db_data:
+
+networks:
+  quiznet:
+    driver: bridge

@@ -1,0 +1,5 @@
+/quiz.ti.github.io/backups/
+*.pyc
+__pycache__/
+.venv/
+node_modules/
