@@ -22,6 +22,7 @@ services:
       - ./backend/server/db.json:/usr/src/app/db.json
     expose:
       - "3000"
+    restart: unless-stopped
     networks:
       - quiznet
 

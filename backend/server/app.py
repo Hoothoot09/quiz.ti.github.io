@@ -40,9 +40,26 @@ def init_postgres():
 
 def read_db():
     if use_postgres:
+        # try to initialize engine on first use if it wasn't ready at import
+        if engine is None:
+            try:
+                init_postgres()
+            except Exception:
+                # if init fails, fall back to file DB
+                return {'leaderboard': []}
         with engine.connect() as conn:
             res = conn.execute(text('SELECT name, sector, score, date FROM leaderboard ORDER BY score DESC, date DESC LIMIT 100'))
-            rows = [dict(row) for row in res]
+            # SQLAlchemy Row may not be directly convertible with dict() in all versions
+            rows = []
+            for row in res:
+                if hasattr(row, '_mapping'):
+                    rows.append(dict(row._mapping))
+                else:
+                    try:
+                        rows.append(dict(row))
+                    except Exception:
+                        # fallback: convert positional row to list of values with column names
+                        rows.append({k: v for k, v in zip(['name', 'sector', 'score', 'date'], row)})
             return {'leaderboard': rows}
     try:
         if not DB_FILE.exists():
@@ -87,12 +104,26 @@ def post_leaderboard():
     now_iso = datetime.utcnow().isoformat() + 'Z'
 
     if use_postgres:
+        # ensure engine is initialized
+        if engine is None:
+            try:
+                init_postgres()
+            except Exception:
+                return jsonify({'error': 'database unavailable'}), 503
         with engine.connect() as conn:
             conn.execute(text('INSERT INTO leaderboard (name, sector, score, date) VALUES (:name, :sector, :score, :date)'),
                          {'name': name, 'sector': sector, 'score': int(score), 'date': now_iso})
             conn.commit()
             res = conn.execute(text('SELECT name, sector, score, date FROM leaderboard ORDER BY score DESC, date DESC LIMIT 100'))
-            rows = [dict(row) for row in res]
+            rows = []
+            for row in res:
+                if hasattr(row, '_mapping'):
+                    rows.append(dict(row._mapping))
+                else:
+                    try:
+                        rows.append(dict(row))
+                    except Exception:
+                        rows.append({k: v for k, v in zip(['name', 'sector', 'score', 'date'], row)})
             return jsonify(rows)
 
     dbdata = read_db()
@@ -105,6 +136,16 @@ def post_leaderboard():
 
 
 if __name__ == '__main__':
+    # when running with the Flask dev server, initialize Postgres immediately
     init_postgres()
     port = int(os.environ.get('PORT', 3000))
     app.run(host='0.0.0.0', port=port)
+
+# When running under a WSGI server like gunicorn, init_postgres will be
+# attempted lazily on first request; additionally we try to initialize
+# once when the module is imported to catch early availability.
+try:
+    init_postgres()
+except Exception:
+    # ignore - DB might not be ready yet (docker compose startup ordering)
+    pass
