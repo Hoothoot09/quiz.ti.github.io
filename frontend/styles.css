@@ -1,11 +1,27 @@
 :root {
-  /* Paleta institucional (Conselho) + contraste */
-  --primary-blue: #003366; /* azul profundo institucional */
-  --primary-blue-600: #0052CC; /* uso para hover/estados */
-  --light-blue: #E6F0FF; /* azul claro para realces */
-  --dark-gray: #0f172a; /* texto principal */
-  --medium-gray: #6b7280;
+  /* Paleta baseada no site institucional (Coren-BA)
+     Variáveis principais para uso consistente em todo o projeto */
+  --color-primary: #0078bf; /* principal */
+  --color-primary-dark: #004f73; /* hover / estados escuros (escurecido para contraste) */
+  --color-primary-light: #0693e3; /* variante clara */
+  --color-success: #5cb85c;
+  --color-warning: #f0ad4e;
+  --color-danger: #d9534f;
+  --color-info: #f4972a;
+  --color-dark: #3a3939; /* texto principal escuro */
+  --color-muted: #626262; /* texto secundário */
+  --color-bg: #ffffff;
+
+  /* Mapear nomes antigos para compatibilidade com o CSS existente */
+  --primary-blue: var(--color-primary);
+  --primary-blue-600: var(--color-primary-dark);
+  --light-blue: #DCEBFF; /* mantido como highlight claro (ligeramente mais escuro para contraste) */
+  --dark-gray: var(--color-dark);
+  --medium-gray: var(--color-muted);
   --light-gray: #f3f4f6;
+  /* espaçamentos e largura máxima da página para alinhamento consistente */
+  --page-gutter: 2rem;
+  --max-page-width: 1200px;
 }
 
 * {
@@ -21,6 +37,27 @@ body {
   line-height: 1.6;
 }
 
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: static;
+  left: 0;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background: var(--primary-blue);
+  color: #fff;
+  border-radius: 6px;
+  z-index: 1000;
+}
+
 header {
   width: 100%;
   /* subtler header with soft gradient */
@@ -30,19 +67,21 @@ header {
   box-shadow: 0 6px 18px rgba(11, 22, 44, 0.06);
   /* keep outer header rectangle so inner card controls rounding */
   border-radius: 0;
+  align-items: center;
 }
 
 /* inner wrapper to align header content with the page container */
 .header-content {
   /* match the main container width and appear as a rounded card */
-  max-width: 1200px;
+  max-width: var(--max-page-width);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center; /* keep logo centered */
   text-align: center;
   gap: 0.75rem;
-  padding: 1rem 1.25rem;
+  /* use the page gutter so the header card lines up with .container */
+  padding: 1rem var(--page-gutter);
   background: #ffffff; /* card background to match quiz card */
   border-radius: 12px; /* same radius as `.content-section` */
   box-shadow: 0 8px 22px rgba(2,6,23,0.06);
@@ -82,9 +121,9 @@ header {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--max-page-width);
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--page-gutter);
 }
 
 .tab-container {
@@ -668,20 +707,24 @@ li {
 
 /* Responsive: tablets and phones tweaks */
 @media (max-width: 900px) {
+  /* reduce the page gutter on smaller screens so header and container align */
+  :root { --page-gutter: 1rem; }
+
   .header-content,
   .container {
-    max-width: calc(100% - 2rem);
-    padding-left: 1rem;
-    padding-right: 1rem;
+    max-width: calc(100% - 2 * var(--page-gutter));
+    padding-left: var(--page-gutter);
+    padding-right: var(--page-gutter);
   }
 
   .header-content {
-    padding: 0.85rem;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
     border-radius: 10px;
   }
 
   .container {
-    padding: 1rem;
+    padding: var(--page-gutter);
   }
 
   .titulo {
@@ -758,4 +801,7 @@ li {
     width: 44px;
     height: 44px;
   }
+
+  /* slightly smaller gutter on very small screens */
+  :root { --page-gutter: 0.75rem; }
 }

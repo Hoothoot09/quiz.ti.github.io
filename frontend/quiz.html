@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- API URL para testes locais: em container, nginx proxya /api para o backend -->
   <meta name="quiz-api-url" content="/api">
-    <link rel="stylesheet" href="styles.css" />
+    <!-- Preload CSS para reduzir render-blocking; fallback com noscript -->
+    <link rel="preload" href="styles.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="styles.css"></noscript>
     <title>Guia de Uso Responsável da Tecnologia</title>
   </head>
   <body>
+    <a class="skip-link" href="#main">Pular para o conteúdo</a>
     <header>
       <div class="header-content">
-        <img class="logo" src="/image/logo-quiz.png" alt="logo do quiz" />
+        <img class="logo" src="/image/logo-quiz.png" alt="Logotipo do Coren-BA — Quiz" width="220" height="60" srcset="/image/logo-quiz.png 1x, /image/logo-quiz@2x.png 2x" />
         <h1 class="titulo">GUIA DE USO RESPONSÁVEL DA TECNOLOGIA</h1>
         <p class="subtitulo">
           Orientações para o uso adequado de equipamentos e softwares
@@ -20,7 +23,7 @@
       </div>
     </header>
 
-    <div class="container">
+    <main id="main" class="container">
       <section id="quiz" class="content-section active">
         <h2>Quiz: O que você faria se...</h2>
         <p>
@@ -806,7 +809,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
           </div>
 
           <!-- Resultado e leaderboard -->
-          <div id="quiz-result" class="quiz-result">
+          <div id="quiz-result" class="quiz-result" role="status" aria-live="polite">
             <h3>Resultado do Quiz</h3>
             <p id="result-text"></p>
             <div id="leaderboard" class="leaderboard">
@@ -816,6 +819,6 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
           </div>
 
           <a href="manual.html">Manual</a>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
