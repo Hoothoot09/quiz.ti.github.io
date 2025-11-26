@@ -35,11 +35,11 @@
           <!-- formulário para coletar nome e setor antes de iniciar -->
           <div id="player-form" class="player-form">
             <label for="player-name">Nome:</label>
-            <input id="player-name" type="text" placeholder="Seu nome" />
+            <input id="player-name" type="text" placeholder="Seu nome" required maxlength="100" aria-required="true" />
             <label for="player-sector">Setor:</label>
-            <input id="player-sector" type="text" placeholder="Seu setor" />
-            <button id="start-quiz" class="btn-comecar">Começar</button>
-            <div id="player-msg" class="player-msg" aria-live="polite"></div>
+            <input id="player-sector" type="text" placeholder="Seu setor" required maxlength="100" aria-required="true" />
+            <button id="start-quiz" class="btn-comecar" aria-label="Iniciar o quiz">Começar</button>
+            <div id="player-msg" class="player-msg" role="alert" aria-live="polite"></div>
           </div>
 
           <div id="progress" class="progress">Pergunta 1 de 1</div>
@@ -204,60 +204,12 @@ https://www.asus.com/mx/content/how-to-protect-your-laptop-while-traveling-or-co
             </div>
           </div>
 
-          <div
-            class="quiz-question"
-            data-explanation="Explicação: O usuário deve, imediatamente, comunicar ao Departamento de TI do ocorrido, em hipótese alguma deve retirar a folha ou mexer no toner."
-            data-source="Fonte: Departamento de TI"
-          >
-            <h3>
-              7. O que deve ser feito se a impressora apresentar papel atolado
-              ou tinta fraca?
-            </h3>
-            <div class="quiz-options">
-              <div class="quiz-option" data-correct="false">
-                <strong>A)</strong> Reiniciar a impressora
-              </div>
-              <div class="quiz-option" data-correct="true">
-                <strong>B)</strong> Esperar o problema se resolver.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>C)</strong> Comunicar o Departamento de TI
-                imediatamente.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>D)</strong> Ligar para o suporte da marca da impressora.
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="quiz-question"
-            data-explanation="Explicação: O Sialm é a solução para um gerenciamento preciso e automatizado do almoxarifado e materiais de consumo."
-            data-source="Fonte: https://implanta.net.br/solucoes/sialm/"
-          >
-            <h3>8. O que é o SIALM?</h3>
-            <div class="quiz-options">
-              <div class="quiz-option" data-correct="false">
-                <strong>A)</strong> Um sistema de suporte técnico para TI.
-              </div>
-              <div class="quiz-option" data-correct="true">
-                <strong>B)</strong> Uma plataforma de controle e gestão de
-                almoxarifado e materiais de consumo.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>C)</strong> Um programa de edição de planilhas.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>D)</strong> Um aplicativo de comunicação interna.
-              </div>
-            </div>
-          </div>
 
           <div
             class="quiz-question"
             data-explanation="Explicação: Quem utiliza o equipamento é responsável por evitar danos, perda ou mau uso, já que o item foi entregue sob sua guarda."
           >
-            <h3>9. A responsabilidade pelo equipamento emprestado é:</h3>
+            <h3>7. A responsabilidade pelo equipamento emprestado é:</h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="true">
                 <strong>A)</strong> Pessoal e intransferível, cabendo ao usuário
@@ -280,7 +232,7 @@ https://www.asus.com/mx/content/how-to-protect-your-laptop-while-traveling-or-co
             data-explanation="Explicação: O primeiro acesso ao notebook deve ser feito na rede da empresa para garantir que o equipamento seja registrado e configurado corretamente no ambiente corporativo. O notebook recebe automaticamente as políticas de segurança da empresa, incluindo permissões de acesso a pastas de rede."
           >
             <h3>
-              10. O que o colaborador deve fazer ao receber o notebook
+              8. O que o colaborador deve fazer ao receber o notebook
               emprestado pela primeira vez?
             </h3>
             <div class="quiz-options">
@@ -307,7 +259,7 @@ https://www.asus.com/mx/content/how-to-protect-your-laptop-while-traveling-or-co
             data-source="Fonte: Techtudo - https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-veja-5-programas-de-acesso-remoto-edsoftwares.ghtml
 "
           >
-            <h3>11. O que são softwares de acesso remoto?</h3>
+            <h3>9. O que são softwares de acesso remoto?</h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
                 <strong>A)</strong> Programas usados apenas para
@@ -330,7 +282,7 @@ https://www.asus.com/mx/content/how-to-protect-your-laptop-while-traveling-or-co
 
           <div class="quiz-question">
             <h3>
-              12. Quando um técnico precisa acessar seu computador, o que você
+              10. Quando um técnico precisa acessar seu computador, o que você
               deve fazer?
             </h3>
             <div class="quiz-options">
@@ -358,7 +310,7 @@ https://www.asus.com/mx/content/how-to-protect-your-laptop-while-traveling-or-co
             data-source="Fonte: Techtudo
 https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-veja-5-programas-de-acesso-remoto-edsoftwares.ghtml"
           >
-            <h3>13. Quais são exemplos de softwares de acesso remoto?</h3>
+            <h3>11. Quais são exemplos de softwares de acesso remoto?</h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
                 <strong>A)</strong> Zoom, Teams e Skype.
@@ -381,7 +333,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Ignite realtime - https://igniterealtime.org/projects/spark/"
           >
             <h3>
-              14. Qual é o principal objetivo do SPARK como ferramenta?
+              12. Qual é o principal objetivo do SPARK como ferramenta?
               Alternativas:
             </h3>
             <div class="quiz-options">
@@ -410,7 +362,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Ignite realtime - https://igniterealtime.org/projects/spark/"
           >
             <h3>
-              15. O SPARK deve ser utilizado para tratar de quais tipos de
+              13. O SPARK deve ser utilizado para tratar de quais tipos de
               assunto?
             </h3>
             <div class="quiz-options">
@@ -439,7 +391,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Ignite realtime - https://igniterealtime.org/projects/spark/"
           >
             <h3>
-              16. Por que é fundamental que o colaborador abra o SPARK ao
+              14. Por que é fundamental que o colaborador abra o SPARK ao
               iniciar o expediente?
             </h3>
             <div class="quiz-options">
@@ -469,7 +421,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Departamento de TI"
           >
             <h3>
-              17. Qual endereço utilizamos para acessar o site de criar
+              15. Qual endereço utilizamos para acessar o site de criar
               chamados?
             </h3>
             <div class="quiz-options">
@@ -490,8 +442,8 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
 
           <div class="quiz-question">
             <h3>
-              18. Ao criar o chamado, por que é importante selecionar a
-              categoria correta (ex: “Problemas de rede”, “E-mail”, “Hardware”)?
+              16. Ao criar o chamado, por que é importante selecionar a
+              categoria correta (ex: "Problemas de rede", "E-mail", "Hardware")?
             </h3>
             <div
               class="quiz-options"
@@ -520,7 +472,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-explanation="Explicação: O destino correto para ser selecionado na impressão é “SEDE em dionísio”, esse é o servidor de impressão ativo da instituição. Após selecioná-lo, a impressão vai para a fila de impressão."
             data-source="Fonte: Departamento de TI"
           >
-            <h3>19. Qual destino deve ser selecionado na hora de imprimir?</h3>
+            <h3>17. Qual destino deve ser selecionado na hora de imprimir?</h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
                 <strong>A)</strong> Impressora padrão.
@@ -542,7 +494,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-explanation="Explicação: A digitalização feita é enviada para a pasta de rede do departamento selecionado no menu da impressora “Config. rápidas”. A pasta de rede pode ser acessada em “Este Computador” e no servidor de arquivos do setor em “Documentos Digitalizados”."
             data-source="Fonte: Departamento de TI"
           >
-            <h3>20. A digitalização feita na impressora multifuncional é enviada para qual destino?</h3>
+            <h3>18. A digitalização feita na impressora multifuncional é enviada para qual destino?</h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
                 <strong>A)</strong> Para o e-mail do usuário.
@@ -565,7 +517,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Departamento de TI"
           >
             <h3>
-              21. O que o usuário deve fazer para o documento digitalizado não sair escala de cinza?
+              19. O que o usuário deve fazer para o documento digitalizado não sair escala de cinza?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -589,7 +541,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Departamento de TI"
           >
             <h3>
-              22. Para enviar uma digitalização, o que deve ser selecionado na impressora?
+              20. Para enviar uma digitalização, o que deve ser selecionado na impressora?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -607,53 +559,6 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             </div>
           </div>
 
-          <div
-            class="quiz-question"
-            data-explanation="Explicação: O usuário deve, imediatamente, comunicar ao Departamento de TI do ocorrido, em hipótese alguma deve retirar a folha ou mexer no toner."
-            data-source="Fonte: Departamento de TI"
-          >
-            <h3>
-              23. O que deve ser feito se a impressora apresentar papel atolado ou tinta fraca?
-            </h3>
-            <div class="quiz-options">
-              <div class="quiz-option" data-correct="false">
-                <strong>A)</strong> Reiniciar a impressora.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>B)</strong> Esperar o problema se resolver.
-              </div>
-              <div class="quiz-option" data-correct="true">
-                <strong>C)</strong> Comunicar o Departamento de TI imediatamente.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>D)</strong> Ligar para o suporte da marca da impressora.
-              </div>
-            </div>
-          </div>
-          
-          <div
-            class="quiz-question"
-            data-explanation="Explicação: O Sialm é a solução para um gerenciamento preciso e automatizado do almoxarifado e materiais de consumo."
-            data-source="Fonte: https://implanta.net.br/solucoes/sialm/"
-          >
-            <h3>
-              24. O que é o SIALM?
-            </h3>
-            <div class="quiz-options">
-              <div class="quiz-option" data-correct="false">
-                <strong>A)</strong> Um sistema de suporte técnico para TI.
-              </div>
-              <div class="quiz-option" data-correct="true">
-                <strong>B)</strong>  Uma plataforma de controle e gestão de almoxarifado e materiais de consumo.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>C)</strong> Um programa de edição de planilhas.
-              </div>
-              <div class="quiz-option" data-correct="false">
-                <strong>D)</strong> Um aplicativo de comunicação interna.
-              </div>
-            </div>
-          </div>
 
           <div
             class="quiz-question"
@@ -661,7 +566,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: https://implanta.net.br/solucoes/sialm/"
           >
             <h3>
-              25. O que o usuário deve fazer para solicitar um material no SIALM?
+              21. O que o usuário deve fazer para solicitar um material no SIALM?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -685,7 +590,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Agência de Defesa Cibernética dos Estados Unidos https://www.cisa.gov/secure-our-world/use-strong-passwords?utm_source=chatgpt.com"
           >
             <h3>
-              26. Qual é a melhor prática para criar uma senha forte?
+              22. Qual é a melhor prática para criar uma senha forte?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -709,7 +614,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: Microsoft https://www.microsoft.com/en-us/security/business/security-101/what-is-two-factor-authentication-2fa?utm_source=chatgpt.com"
           >
             <h3>
-              27. O que é autenticação em dois fatores (2FA)?
+              23. O que é autenticação em dois fatores (2FA)?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -733,7 +638,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: IBM https://www.ibm.com/br-pt/think/topics/phishing"
           >
             <h3>
-              28. O que é phishing?
+              24. O que é phishing?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -757,7 +662,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: IBM https://www.ibm.com/br-pt/think/topics/malware"
           >
             <h3>
-              29. O que é malware?
+              25. O que é malware?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false">
@@ -781,7 +686,7 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             data-source="Fonte: exabeam https://www.exabeam.com/explainers/information-security/the-12-elements-of-an-information-security-policy/"
           >
             <h3>
-              30. O que deve ser evitado ao lidar com informações corporativas?
+              26. O que deve ser evitado ao lidar com informações corporativas?
             </h3>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="true">
@@ -818,7 +723,12 @@ https://www.techtudo.com.br/listas/2023/07/quer-controlar-seu-pc-a-distancia-vej
             <button id="restart-quiz" class="btn">Refazer Quiz</button>
           </div>
 
-          <a href="manual.html">Manual</a>
+          <div style="margin-top: 2rem; text-align: center;">
+            <a href="manual.html" class="tab-link" style="display: inline-block; padding: 0.75rem 1.5rem; background-color: var(--primary-blue); color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">📘 Acessar Manual Completo</a>
+          </div>
+        </div>
+      </section>
+    </main>
     <script src="script.js" defer></script>
   </body>
 </html>

@@ -95,11 +95,28 @@ def get_leaderboard():
 @app.route('/leaderboard', methods=['POST'])
 def post_leaderboard():
     payload = request.get_json(force=True)
+    if not payload:
+        return jsonify({'error': 'JSON payload is required'}), 400
+    
     name = payload.get('name')
     sector = payload.get('sector')
     score = payload.get('score')
+    
+    # Validação básica
     if not name or not sector or not isinstance(score, (int, float)):
         return jsonify({'error': 'name, sector and numeric score are required'}), 400
+    
+    # Validação de tamanho (sanitização básica)
+    name = str(name).strip()[:100]  # máximo 100 caracteres
+    sector = str(sector).strip()[:100]  # máximo 100 caracteres
+    
+    if not name or not sector:
+        return jsonify({'error': 'name and sector cannot be empty'}), 400
+    
+    # Validação de score (0 a 30 questões, permitindo margem)
+    score_int = int(score)
+    if score_int < 0 or score_int > 30:
+        return jsonify({'error': 'score must be between 0 and 30'}), 400
 
     now_iso = datetime.utcnow().isoformat() + 'Z'
 
@@ -112,7 +129,7 @@ def post_leaderboard():
                 return jsonify({'error': 'database unavailable'}), 503
         with engine.connect() as conn:
             conn.execute(text('INSERT INTO leaderboard (name, sector, score, date) VALUES (:name, :sector, :score, :date)'),
-                         {'name': name, 'sector': sector, 'score': int(score), 'date': now_iso})
+                         {'name': name, 'sector': sector, 'score': score_int, 'date': now_iso})
             conn.commit()
             res = conn.execute(text('SELECT name, sector, score, date FROM leaderboard ORDER BY score DESC, date DESC LIMIT 100'))
             rows = []
@@ -128,7 +145,7 @@ def post_leaderboard():
 
     dbdata = read_db()
     dbdata.setdefault('leaderboard', [])
-    dbdata['leaderboard'].append({'name': name, 'sector': sector, 'score': int(score), 'date': now_iso})
+    dbdata['leaderboard'].append({'name': name, 'sector': sector, 'score': score_int, 'date': now_iso})
     write_db(dbdata)
     # return top 100
     lb = sorted(dbdata['leaderboard'], key=lambda x: (-int(x.get('score', 0)), x.get('date', '')))

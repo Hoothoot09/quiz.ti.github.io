@@ -148,14 +148,38 @@ if (startBtn) {
   startBtn.addEventListener("click", () => {
     const name = playerNameInput ? playerNameInput.value.trim() : "";
     const sector = playerSectorInput ? playerSectorInput.value.trim() : "";
+    
+    // Validação melhorada
     if (!name || !sector) {
       showPlayerMessage(
         "Por favor, preencha seu nome e setor antes de começar."
       );
+      if (playerNameInput && !name) playerNameInput.focus();
+      else if (playerSectorInput && !sector) playerSectorInput.focus();
       return;
     }
-    playerName = name;
-    playerSector = sector;
+    
+    // Validação de tamanho máximo (100 caracteres)
+    if (name.length > 100 || sector.length > 100) {
+      showPlayerMessage(
+        "Nome e setor devem ter no máximo 100 caracteres."
+      );
+      return;
+    }
+    
+    // Sanitização básica (remover caracteres perigosos)
+    const sanitizedName = name.replace(/[<>]/g, '');
+    const sanitizedSector = sector.replace(/[<>]/g, '');
+    
+    if (sanitizedName !== name || sanitizedSector !== sector) {
+      showPlayerMessage(
+        "Nome e setor não podem conter os caracteres < ou >."
+      );
+      return;
+    }
+    
+    playerName = sanitizedName;
+    playerSector = sanitizedSector;
     quizStarted = true;
     // esconder form e mostrar controles
     if (playerForm) playerForm.style.display = "none";
@@ -209,8 +233,11 @@ if (checkBtn) {
 
     if (!selected) {
       feedback.innerHTML =
-        '<p class="warning">Por favor, selecione uma opção antes de verificar.</p>';
+        '<p class="warning" role="alert">Por favor, selecione uma opção antes de verificar.</p>';
       feedback.scrollIntoView({ behavior: "smooth" });
+      // Focar na primeira opção para acessibilidade
+      const firstOption = question.querySelector('.quiz-option');
+      if (firstOption) firstOption.focus();
       return;
     }
 
