@@ -2,9 +2,9 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: quiz
-      POSTGRES_PASSWORD: quizpass
-      POSTGRES_DB: quizdb
+      POSTGRES_USER: ${POSTGRES_USER:-quiz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quizpass}
+      POSTGRES_DB: ${POSTGRES_DB:-quizdb}
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./backend/server/db.sql:/docker-entrypoint-initdb.d/db.sql:ro
@@ -15,7 +15,7 @@ services:
     build:
       context: ./backend/server
     environment:
-      - DATABASE_URL=postgresql://quiz:quizpass@db:5432/quizdb
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-quiz}:${POSTGRES_PASSWORD:-quizpass}@db:5432/${POSTGRES_DB:-quizdb}
     depends_on:
       - db
     volumes:

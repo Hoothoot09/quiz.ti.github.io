@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 30000
+  },
+  "chromeLauncher": {
+    "launchOptions": {
+      "args": ["--no-sandbox", "--window-size=412,915"]
+    }
+  }
+}
